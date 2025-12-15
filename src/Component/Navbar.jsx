@@ -1,0 +1,87 @@
+import React from 'react';
+
+const Navbar = () => {
+    
+    return (
+        <div>
+            <h1>Navbar</h1>
+            {/* <div className='bg-slate-500 px-[5px] lg:px-[70px]'>
+                <div className="flex justify-between p-3 ">
+                    <div className="navbar-start">
+                        <div className="dropdown text-white">
+                            <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
+                                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 20 20" stroke="currentColor"> <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h8m-8 6h16" /> </svg>
+                            </div>
+                            <ul
+                                tabIndex="-1"
+                                className="menu menu-sm dropdown-content bg-slate-500 rounded-box z-5 mt-3 w-52 p-2 shadow">
+                                <NavLink to='/'>Home</NavLink>
+                                <NavLink to='/pet_supplies' >Pet & Supplies</NavLink>
+                                {
+                                    user && <>
+                                        <NavLink to='/addlisting'>Add Listing</NavLink>
+                                        <NavLink to={`/mylistings/${user.email}`}>My Listings</NavLink>
+                                        <NavLink to={`/myorders/${user.email}`}>My Orders</NavLink>
+                                    </>
+                                }
+
+                            </ul>
+                        </div>
+                        <div className=' hidden md:flex items-center gap-2'>
+                            <div className='w-[30px] h-[30px] '>
+                                <img src="https://i.ibb.co.com/Kpbv5Bpp/a4c2a2a9ba9fda58fc3fcdf92d806dda-love-pet-shop-logo-design.jpg"
+                                    className='w-full h-full rounded-full object-cover' />
+                            </div>
+
+                            <a className=" text-xl text-white font-bold">Paw-Mart</a>
+                        </div>
+                        <a className="md:hidden text-xl text-white font-bold shrink-0">Paw-Mart</a>
+                    </div>
+                    <div className="navbar-center mr-5 lg:mr-0 hidden lg:flex">
+                        <ul className=" px-1 text-white font-bold">
+                            <NavLink to='/' className='mr-5'>Home</NavLink>
+                            <NavLink to='/pet_supplies' className='mr-5' >Pet & Supplies</NavLink>
+
+                            {
+                                user && <>
+                                    <NavLink to='/addlisting' className='mr-5'>Add Listing</NavLink>
+                                    <NavLink to={`/mylistings/${user.email}`} className='mr-5'>My Listings</NavLink>
+                                    <NavLink to={`/myorders/${user.email}`}>My Orders</NavLink>
+                                </>
+                            }
+                        </ul>
+                    </div>
+
+                    <div className="navbar-end flex gap-2 md:gap-3">
+
+                        {
+                        user && <div className=' relative  rounded-full flex items-center justify-center  gap-3'>
+                            <div onMouseEnter={() => setShowName(true)} onMouseLeave={() => setShowName(false)} className='h-[35px] w-[35px] shrink-0 '>
+                                <img className='h-full w-full rounded-full' src={user.photoURL} alt="" />
+                            </div>
+
+                            {showName && (
+                                <p className="absolute top-[50px] left-1/2 -translate-x-1/2 bg-black text-white text-sm rounded px-3 py-1 whitespace-nowrap shadow">
+                                    {user.displayName}
+                                </p>
+                            )}
+
+
+                        </div>
+                    }
+                        {
+                            user ? <Link onClick={handleSignOut} className='btn px-2 md:px-6' to='/login'>Log Out</Link> :
+                                <>
+                                    <Link className='btn' to='/login'>Login</Link>
+                                    <Link className='btn' to='/register'>Register</Link>
+                                </>
+                        }
+
+                    </div>
+                </div>
+            </div> */}
+        </div>
+    );
+};
+
+export default Navbar;
