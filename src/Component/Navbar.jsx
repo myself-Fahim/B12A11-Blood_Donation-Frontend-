@@ -1,11 +1,22 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import AuthContext from '../AuthProvider/AuthContext';
+import { Link, NavLink } from 'react-router';
+import { signOut } from 'firebase/auth';
+import auth from '../Firebase/Firebase.init';
 
 const Navbar = () => {
-    
+    const { user } = useContext(AuthContext)
+
+    const handleSignout = () =>{
+         signOut(auth)
+         .then(()=>{
+            alert('Signout Successfully')
+         })     
+    }
+
     return (
         <div>
-            <h1>Navbar</h1>
-            {/* <div className='bg-slate-500 px-[5px] lg:px-[70px]'>
+            <div className='bg-red-800 px-[5px] lg:px-[70px]'>
                 <div className="flex justify-between p-3 ">
                     <div className="navbar-start">
                         <div className="dropdown text-white">
@@ -16,14 +27,8 @@ const Navbar = () => {
                                 tabIndex="-1"
                                 className="menu menu-sm dropdown-content bg-slate-500 rounded-box z-5 mt-3 w-52 p-2 shadow">
                                 <NavLink to='/'>Home</NavLink>
-                                <NavLink to='/pet_supplies' >Pet & Supplies</NavLink>
-                                {
-                                    user && <>
-                                        <NavLink to='/addlisting'>Add Listing</NavLink>
-                                        <NavLink to={`/mylistings/${user.email}`}>My Listings</NavLink>
-                                        <NavLink to={`/myorders/${user.email}`}>My Orders</NavLink>
-                                    </>
-                                }
+                                <NavLink to='/dashboard'>Dashboard</NavLink>
+                             
 
                             </ul>
                         </div>
@@ -33,53 +38,30 @@ const Navbar = () => {
                                     className='w-full h-full rounded-full object-cover' />
                             </div>
 
-                            <a className=" text-xl text-white font-bold">Paw-Mart</a>
+                            <a className=" text-xl text-white font-bold">Blood-Donation</a>
                         </div>
                         <a className="md:hidden text-xl text-white font-bold shrink-0">Paw-Mart</a>
                     </div>
                     <div className="navbar-center mr-5 lg:mr-0 hidden lg:flex">
                         <ul className=" px-1 text-white font-bold">
                             <NavLink to='/' className='mr-5'>Home</NavLink>
-                            <NavLink to='/pet_supplies' className='mr-5' >Pet & Supplies</NavLink>
+                            <NavLink to='/dashboard' className='mr-5' >Dashboard</NavLink>
 
-                            {
-                                user && <>
-                                    <NavLink to='/addlisting' className='mr-5'>Add Listing</NavLink>
-                                    <NavLink to={`/mylistings/${user.email}`} className='mr-5'>My Listings</NavLink>
-                                    <NavLink to={`/myorders/${user.email}`}>My Orders</NavLink>
-                                </>
-                            }
+                      
                         </ul>
                     </div>
 
                     <div className="navbar-end flex gap-2 md:gap-3">
-
                         {
-                        user && <div className=' relative  rounded-full flex items-center justify-center  gap-3'>
-                            <div onMouseEnter={() => setShowName(true)} onMouseLeave={() => setShowName(false)} className='h-[35px] w-[35px] shrink-0 '>
-                                <img className='h-full w-full rounded-full' src={user.photoURL} alt="" />
-                            </div>
-
-                            {showName && (
-                                <p className="absolute top-[50px] left-1/2 -translate-x-1/2 bg-black text-white text-sm rounded px-3 py-1 whitespace-nowrap shadow">
-                                    {user.displayName}
-                                </p>
-                            )}
-
-
-                        </div>
-                    }
-                        {
-                            user ? <Link onClick={handleSignOut} className='btn px-2 md:px-6' to='/login'>Log Out</Link> :
+                            user ? <Link onClick={handleSignout} className='btn px-2 md:px-6' to='/login'>Log Out</Link> :
                                 <>
                                     <Link className='btn' to='/login'>Login</Link>
-                                    <Link className='btn' to='/register'>Register</Link>
                                 </>
                         }
 
                     </div>
                 </div>
-            </div> */}
+            </div>
         </div>
     );
 };
