@@ -7,6 +7,7 @@ import Root from "../Layout/Root";
 import DashBoardLayout from "../dashboardLayout/dashBoardLayout";
 import DashboardHome from "../Dashboard/Home";
 import Profile from "../Dashboard/Profile";
+import MyDonation from "../Dashboard/MyDonation";
 
 
 
@@ -36,12 +37,16 @@ const router = createBrowserRouter([
         Component:DashBoardLayout,
         children:[
             {
-               index:true,
+               path:'/dashboard',
                element:<DashboardHome></DashboardHome>
             },
             {
                 path:'profile',
                 element:<Profile></Profile>
+            },
+            {
+                path:'mydonation',
+                element:<MyDonation></MyDonation>
             }
         ]
     }

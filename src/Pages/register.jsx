@@ -5,6 +5,7 @@ import { useContext, useEffect, useState } from 'react';
 import { Eye, EyeOff } from 'lucide-react';
 import axios from 'axios';
 import AuthContext from '../AuthProvider/AuthContext';
+import toast, { Toaster } from 'react-hot-toast';
 
 
 const Register = () => {
@@ -12,20 +13,20 @@ const Register = () => {
     const navigator = useNavigate()
     const [error, setError] = useState('')
     const [showPass, setShowPass] = useState(false)
-    const [district, setDistrict] = useState(null)
-    const [upazila, setUpazila] = useState(null)
+    const [district, setDistrict] = useState([])
+    const [upazila, setUpazila] = useState([])
 
     useEffect(() => {
         fetch('./District.json')
             .then(res => res.json())
             .then(data => setDistrict(data))
-    }, [])
+    }, [district])
 
     useEffect(() => {
         fetch('./upazila.json')
             .then(res => res.json())
             .then(data => setUpazila(data))
-    }, [])
+    }, [upazila])
 
 
 
@@ -40,7 +41,7 @@ const Register = () => {
         const file = photo.files[0]
         const upazila = e.target.upazila.value
         const district = e.target.district.value
-        const role = e.target.role.value
+        const group = e.target.group.value
 
         const res = await axios.post(`https://api.imgbb.com/1/upload?key=38b4eb287c57a9b82557d99bf3afdf9d`, { image: file }, {
 
@@ -58,7 +59,7 @@ const Register = () => {
             upazila,
             district,
             status: "active",
-            role
+            group
         }
 
         if (password !== confirmPassword) {
@@ -82,11 +83,11 @@ const Register = () => {
                     // console.log(result.user)
                     setUser(result.user)
                     axios.post('http://localhost:5000/users', formData)
-                        .then(res => console.log(res.data))
+                        .then(res => toast.success('Successfully Registered'))
                     // e.target.reset()
                     // navigator('/')
                 })
-                .catch(error => console.log(error.message))
+                .catch(error => toast.error(error.message))
         }
 
     }
@@ -99,43 +100,50 @@ const Register = () => {
 
     return (
         <div>
+            <Toaster></Toaster>
             <div className='min-h-screen flex items-center justify-center mb-10 mt-8'>
                 <form onSubmit={handleCreateUser}>
                     <h1 className='text-center text-red-800 text-3xl font-bold mb-4'>Register</h1>
                     <fieldset className="fieldset shadow-2xl py-8 border-base-300 rounded-box w-[400px] border p-4">
 
                         <label className="label font-bold">Name</label>
-                        <input type="text" name='name' className="input w-full" placeholder="Your Name" />
+                        <input required type="text" name='name' className="input w-full" placeholder="Your Name" />
 
                         <label className="label font-bold">Email</label>
-                        <input type="email" name='email' className="input w-full" placeholder="Email" />
+                        <input required type="email" name='email' className="input w-full" placeholder="Email" />
 
 
                         <label className="label font-bold">Photo </label>
-                        <input type="file" name='photo' className="input w-full" />
+                        <input required type="file" name='photo' className="input w-full" />
 
-                        <label className="label font-bold">Role </label>
-                        <select name='role' defaultValue="Select Role" className="select w-full">
-                            <option disabled={true}>Select Role</option>
-                            <option>Donor</option>
-                            <option>Volunteer</option>
+                        <label className="label font-bold">Blood Group</label>
+                        <select required name='group' defaultValue="Select Blood Group" className="select w-full">
+                            <option disabled={true}>Select Blood Group</option>
+                            <option>A+</option>
+                            <option>A-</option>
+                            <option>B+</option>
+                            <option>B-</option>
+                            <option>AB+</option>
+                            <option>AB-</option>
+                            <option>O+</option>
+                            <option>O-</option>
                         </select>
 
                         <label className="label font-bold"> District</label>
-                        <select name='district' defaultValue="Select District" className="select w-full">
-                            <option disabled={true}>Select District </option>
+                        <select required name='district' defaultValue="" className="select w-full">
+                            <option value="" disabled>Select District </option>
                             {
-                                district ? district.map(district => <option key={district.id}>{district.name} ({district.bn_name})</option>) : <p>Loading....</p>
+                                 district.map(district => <option key={district.id}>{district.name} ({district.bn_name})</option>) 
                             }
 
                         </select>
 
 
                         <label className="label font-bold">Upazila</label>
-                        <select name='upazila' defaultValue="Select Upazila" className="select w-full">
-                            <option disabled={true}>Select Upazila</option>
+                        <select required name='upazila' defaultValue="" className="select w-full">
+                            <option value="" disabled>Select Upazila</option>
                             {
-                                upazila ? upazila.map(upazila => <option key={upazila.id}>{upazila.name} ({upazila.bn_name})</option>) : <p>Loading....</p>
+                                upazila.map(upazila => <option key={upazila.id}>{upazila.name} ({upazila.bn_name})</option>) 
                             }
 
                         </select>
@@ -144,7 +152,7 @@ const Register = () => {
 
                         <label className="label font-bold">Password</label>
                         <div className='relative flex items-center'>
-                            <input type={showPass ? 'text' : 'password'} name='password' className="input  w-full" placeholder="Password" />
+                            <input required type={showPass ? 'text' : 'password'} name='password' className="input  w-full" placeholder="Password" />
 
                             {
                                 showPass ? <EyeOff onClick={handleShowPass} className='w-[20px] h-[20px] cursor-pointer absolute top-3 right-2' />
@@ -155,7 +163,7 @@ const Register = () => {
 
                         <label className="label font-bold">Confirm Password</label>
                         <div className='relative flex items-center'>
-                            <input type={showPass ? 'text' : 'password'} name='confirm_password' className="input  w-full" placeholder="Confirm Password" />
+                            <input required type={showPass ? 'text' : 'password'} name='confirm_password' className="input  w-full" placeholder="Confirm Password" />
 
                             {
                                 showPass ? <EyeOff onClick={handleShowPass} className='w-[20px] h-[20px] cursor-pointer absolute top-3 right-2' />

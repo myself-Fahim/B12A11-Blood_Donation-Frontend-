@@ -25,7 +25,7 @@ const Navbar = () => {
                             </div>
                             <ul
                                 tabIndex="-1"
-                                className="menu menu-sm dropdown-content bg-slate-500 rounded-box z-5 mt-3 w-52 p-2 shadow">
+                                className="menu menu-sm dropdown-content bg-red-800 rounded-box z-5 mt-3 w-52 p-2 shadow">
                                 <NavLink to='/'>Home</NavLink>
                                 <NavLink to='/dashboard'>Dashboard</NavLink>
                              
@@ -44,8 +44,8 @@ const Navbar = () => {
                     </div>
                     <div className="navbar-center mr-5 lg:mr-0 hidden lg:flex">
                         <ul className=" px-1 text-white font-bold">
-                            <NavLink to='/' className='mr-5'>Home</NavLink>
-                            <NavLink to='/dashboard' className='mr-5' >Dashboard</NavLink>
+                            <NavLink to='/' className='mr-5 py-2 px-3'>Home</NavLink>
+                            <NavLink to='/dashboard' className='mr-5 p-2' >Dashboard</NavLink>
 
                       
                         </ul>
