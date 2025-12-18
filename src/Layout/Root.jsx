@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import { Outlet } from 'react-router';
 import AuthContext from '../AuthProvider/AuthContext';
 import Navbar from '../Component/Navbar';
+import { Loader } from 'lucide-react';
 
 const Root = () => {
   const {loader} = useContext(AuthContext)
@@ -9,7 +10,7 @@ const Root = () => {
     return (
         <div>
           <Navbar></Navbar>
-       {   loader? <p>Loading....</p> :
+       {   loader? <Loader></Loader>:
           <Outlet></Outlet>}  
         </div>
     );

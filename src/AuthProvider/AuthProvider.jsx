@@ -8,6 +8,18 @@ const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null)
     const [loader, setLoader] = useState(true)
     const [role,setRole] = useState(null)
+    const [district,setDistrict] = useState([])
+    const [upazila,setUpazila] = useState([])
+
+    useEffect(()=>{
+        axios('/District.json')
+        .then(res => setDistrict(res.data))
+    },[])
+    useEffect(()=>{
+        axios('/upazila.json')
+        .then(res => setUpazila(res.data))
+    },[])
+
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged((auth), (currentUser) => {
@@ -34,7 +46,9 @@ const AuthProvider = ({ children }) => {
         loader,
         role,
         setLoader,
-        setUser
+        setUser,
+        district,
+        upazila
     }
     return (
         <div>

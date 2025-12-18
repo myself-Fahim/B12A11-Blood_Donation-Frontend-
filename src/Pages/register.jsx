@@ -9,25 +9,11 @@ import toast, { Toaster } from 'react-hot-toast';
 
 
 const Register = () => {
-    const { user, setUser } = useContext(AuthContext)
+    const { user, setUser,district,upazila } = useContext(AuthContext)
     const navigator = useNavigate()
     const [error, setError] = useState('')
     const [showPass, setShowPass] = useState(false)
-    const [district, setDistrict] = useState([])
-    const [upazila, setUpazila] = useState([])
-
-    useEffect(() => {
-        fetch('./District.json')
-            .then(res => res.json())
-            .then(data => setDistrict(data))
-    }, [district])
-
-    useEffect(() => {
-        fetch('./upazila.json')
-            .then(res => res.json())
-            .then(data => setUpazila(data))
-    }, [upazila])
-
+    
 
 
 

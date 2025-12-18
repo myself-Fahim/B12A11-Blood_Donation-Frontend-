@@ -8,6 +8,7 @@ import DashBoardLayout from "../dashboardLayout/dashBoardLayout";
 import DashboardHome from "../Dashboard/Home";
 import Profile from "../Dashboard/Profile";
 import MyDonation from "../Dashboard/MyDonation";
+import AddRequest from "../Dashboard/AddRequest";
 
 
 
@@ -47,7 +48,11 @@ const router = createBrowserRouter([
             {
                 path:'mydonation',
                 element:<MyDonation></MyDonation>
-            }
+            },
+            {
+                path:'request',
+                element:<AddRequest></AddRequest>
+            },
         ]
     }
 ])
