@@ -5,14 +5,14 @@ import AuthContext from '../AuthProvider/AuthContext';
 import Loader from '../Component/Loader';
 
 const DashBoardLayout = () => {
-    const {loader} = useContext(AuthContext)
+   
     return (
         <div className='h-screen'>
             <div className='flex h-full'>
                 <Aside></Aside>
                 {
 
-                    loader ? <Loader></Loader>:    <div className='flex-1 h-full overflow-y-auto'>
+                 <div className='flex-1 h-full overflow-y-auto'>
                       <Outlet></Outlet>
                 </div>
                 }

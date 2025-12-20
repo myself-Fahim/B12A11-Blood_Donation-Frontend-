@@ -71,7 +71,7 @@ const Register = () => {
                     axios.post('http://localhost:5000/users', formData)
                         .then(res => toast.success('Successfully Registered'))
                     // e.target.reset()
-                    // navigator('/')
+                    navigator('/')
                 })
                 .catch(error => toast.error(error.message))
         }

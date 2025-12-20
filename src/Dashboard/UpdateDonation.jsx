@@ -1,18 +1,27 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import AuthContext from '../AuthProvider/AuthContext';
-
-import toast, { Toaster } from 'react-hot-toast';
 import useAxiosSecure from '../Hooks/useAxiosSecure';
+import Loader from '../Component/Loader';
+import { useNavigate, useParams } from 'react-router';
 
-const AddRequest = () => {
-    const { district, upazila, user } = useContext(AuthContext)
+const UpdateDonation = () => {
+    const {  district, upazila } = useContext(AuthContext)
+    const {id} = useParams()
     const axiosSecure = useAxiosSecure()
+    const [reqInfo,setReqInfo]= useState(null)
+    const navigator = useNavigate()
 
+    useEffect(()=>{
+        axiosSecure(`/request/id/${id}`)
+        .then(res=>setReqInfo(res.data))
+        .catch(err=>console.log(err))
+    },[axiosSecure, id])
+    
 
-    const handleSubmit = (e) => {
+  
+    const handleForm =(e)=>{
 
         e.preventDefault();
-       
         const requester = e.target.requesterName.value
         const requesterEmail = e.target.requesterEmail.value
         const recipient = e.target.recipientName.value
@@ -38,20 +47,22 @@ const AddRequest = () => {
             donationTime,
             message
         }
+
+        axiosSecure.put(`/update/id/${id}`,formData)
+        navigator('/dashboard')
         
-        axiosSecure.post('http://localhost:5000/request',formData)
-        .then(res => toast.success('Created Successfully'))
-        .catch(err => toast.error(err))
 
     }
 
 
+
     return (
-        <div className='p-5 lg:p-10'>
-            <Toaster></Toaster>
-            <div className='flex items-center justify-center'>
-                <form onSubmit={handleSubmit}>
-                    <h1 className='text-center text-red-800 text-3xl font-bold mb-4'>Create Donation Request</h1>
+
+        <>
+        {
+            reqInfo ?  <div className='flex items-center justify-center'>
+                <form onSubmit={handleForm}>
+                    <h1 className='text-center text-red-800 text-3xl font-bold mb-4'>Update Donation Request</h1>
                     <fieldset className="fieldset shadow-2xl py-8 border-base-300 rounded-box w-[300px]  md:w-[600px] border p-4">
 
 
@@ -62,7 +73,7 @@ const AddRequest = () => {
                             name="requesterName"
                             className="input w-full"
                             placeholder="Requester Name"
-                            value={user.displayName}
+                            Value={reqInfo.requester}
 
                         />
 
@@ -73,7 +84,8 @@ const AddRequest = () => {
                             name="requesterEmail"
                             className="input w-full"
                             placeholder="Requester Email"
-                            value={user.email}
+                            Value={reqInfo.requesterEmail}
+                           
 
                         />
 
@@ -84,16 +96,17 @@ const AddRequest = () => {
                             name="recipientName"
                             className="input w-full"
                             placeholder="Recipient Name"
+                            defaultValue={reqInfo.recipient}
                         />
 
                         <label className="label font-bold">Recipient District</label>
                         <select
                             required
                             name="recipientDistrict"
-                            defaultValue="Select District"
+                            defaultValue={reqInfo.recipientDistrict}
                             className="select w-full"
                         >
-                            <option disabled={true}>Select District</option>
+                            <option disabled={true}>{reqInfo.recipientDistrict}</option>
                             {
                                 district.map(district => <option key={district.id}>{district.name} ({district.bn_name})</option>)
                             }
@@ -103,10 +116,10 @@ const AddRequest = () => {
                         <select
                             required
                             name="recipientUpazila"
-                            defaultValue="Select Upazila"
+                            defaultValue={reqInfo.recipientUpazila}
                             className="select w-full"
                         >
-                            <option disabled={true}>Select Upazila</option>
+                            <option disabled={true}>{reqInfo.recipientUpazila}</option>
                             {
                                 upazila.map(upazila => <option key={upazila.id}>{upazila.name} ({upazila.bn_name})</option>)
                             }
@@ -119,6 +132,7 @@ const AddRequest = () => {
                             name="hospitalName"
                             className="input w-full"
                             placeholder="Dhaka Medical College Hospital"
+                            defaultValue={reqInfo.hospital}
                         />
 
                         <label className="label font-bold">Full Address Line</label>
@@ -128,16 +142,17 @@ const AddRequest = () => {
                             name="fullAddress"
                             className="input w-full"
                             placeholder="Zahir Raihan Rd, Dhaka"
+                            defaultValue={reqInfo.address}
                         />
 
                         <label className="label font-bold">Blood Group</label>
                         <select
                             required
                             name="bloodGroup"
-                            defaultValue="Select Blood Group"
+                            defaultValue={reqInfo.bloodGrp}
                             className="select w-full"
                         >
-                            <option disabled={true}>Select Blood Group</option>
+                            <option disabled={true}>defaultValue={reqInfo.bloodGrp}</option>
                             <option>A+</option>
                             <option>A-</option>
                             <option>B+</option>
@@ -149,14 +164,14 @@ const AddRequest = () => {
                         </select>
 
                         <label className="label font-bold">Donation Date</label>
-                        <input required type="date" name="donationDate" className="input w-full" />
+                        <input defaultValue={reqInfo.donationDate} required type="date" name="donationDate" className="input w-full" />
 
                         <label className="label font-bold">Donation Time</label>
-                        <input required type="time" name="donationTime" className="input w-full" />
+                        <input defaultValue={reqInfo.donationTime} required type="time" name="donationTime" className="input w-full" />
 
                         <label className="label font-bold">Request Message</label>
                         <textarea
-                            defaultValue='Write..'
+                            defaultValue={reqInfo.message}
                             name="requestMessage"
                             className="textarea textarea-bordered w-full"
                             placeholder="Write in details why you need blood..."
@@ -164,13 +179,21 @@ const AddRequest = () => {
                         />
 
                         <button className="btn btn-neutral border-none hover:transition ease-in-out mt-4 bg-red-800 text-white">
-                            Request
+                            Update
                         </button>
                     </fieldset>
                 </form>
-            </div>
-        </div>
+            </div> :<Loader></Loader>
+        }
+        
+        
+        </>
+     
+       
+       
+
+
     );
 };
 
-export default AddRequest;
+export default UpdateDonation;
