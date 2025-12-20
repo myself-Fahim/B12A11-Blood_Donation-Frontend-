@@ -37,8 +37,6 @@ const AuthProvider = ({ children }) => {
             return
         axios(`http://localhost:5000/users/role/${user?.email}`)
             .then(res => setRole(res.data.role))
-
-
     }, [user])
 
    

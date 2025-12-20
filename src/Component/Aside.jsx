@@ -1,7 +1,10 @@
-import React from "react";
+import React, { useContext } from "react";
 import { NavLink } from "react-router";
+import AuthContext from "../AuthProvider/AuthContext";
 
 const Aside = () => {
+
+    const { role } = useContext(AuthContext)
     return (
         <div className="h-screen">
             <div className="drawer lg:drawer-open h-screen">
@@ -27,7 +30,7 @@ const Aside = () => {
 
                     {/* IMPORTANT: use h-screen (not min-h-full) */}
                     <ul className="menu bg-red-950 text-white h-screen w-80 p-4 overflow-y-auto">
-                        <h1 className="text-3xl font-bold mb-8">Admin Pannel</h1>
+                        <h1 className="text-3xl font-bold mb-8">{String(role).toUpperCase()} PANEL</h1>
 
                         <div className="flex flex-col">
                             <NavLink to="/dashboard" end className="text-xl font-bold mb-3 py-2 px-2">
@@ -36,12 +39,16 @@ const Aside = () => {
                             <NavLink to="/dashboard/Profile" className="text-xl font-bold py-2 px-2 mb-3">
                                 Profile
                             </NavLink>
-                            <NavLink to="/dashboard/request" className="text-xl font-bold py-2 px-2 mb-3">
-                                Add Request
-                            </NavLink>
-                            <NavLink to="/dashboard/mydonation" className="text-xl font-bold py-2 px-2 mb-5">
-                                My Donation
-                            </NavLink>
+                            {
+                                role == 'donor' && <NavLink to="/dashboard/request" className="text-xl font-bold py-2 px-2 mb-3">
+                                    Add Request
+                                </NavLink>
+                            }
+                            {
+                                role == 'donor' && <NavLink to="/dashboard/mydonation" className="text-xl font-bold py-2 px-2 mb-5">
+                                    My Donation
+                                </NavLink>
+                            }
                         </div>
                     </ul>
                 </div>

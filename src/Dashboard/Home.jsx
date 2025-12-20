@@ -50,20 +50,11 @@ const DashboardHome = () => {
         navigator(`/dashboard/donation-request-details/${id}`)
 
     }
-
-    console.log(requestInfo)
-
-
-
-
     return (
         <div>
             <h1 className='text-3xl text-center mt-10'>Welcome <span className='font-bold  text-red-950'>{user.displayName}!</span></h1>
 
             <h1 className='font-bold text-3xl mt-20 pl-[20px] lg:pl-[70px] mb-8'>Recent Donation</h1>
-
-
-
 
             <div className="overflow-x-auto mx-4 lg:mx-10">
                 {
@@ -123,16 +114,10 @@ const DashboardHome = () => {
 
             </div>
 
-
-            
           <div className='w-fit mx-auto mt-10'>
                 <Link to='/dashboard/mydonation' className='btn bg-red-900 text-white'>View My All Request</Link>
             </div>
             
-
-
-
-
             <dialog id="my_modal_3" className="modal">
                 <div className="modal-box">
                     <form method="dialog">

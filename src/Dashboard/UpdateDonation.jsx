@@ -2,9 +2,12 @@ import React, { useContext, useEffect, useState } from 'react';
 import AuthContext from '../AuthProvider/AuthContext';
 import useAxiosSecure from '../Hooks/useAxiosSecure';
 import Loader from '../Component/Loader';
-import { useNavigate, useParams } from 'react-router';
+import { useLocation, useNavigate, useParams } from 'react-router';
 
 const UpdateDonation = () => {
+
+    const location = useLocation()
+    console.log(location)
     const {  district, upazila } = useContext(AuthContext)
     const {id} = useParams()
     const axiosSecure = useAxiosSecure()
@@ -49,7 +52,14 @@ const UpdateDonation = () => {
         }
 
         axiosSecure.put(`/update/id/${id}`,formData)
+        if(location.state == 'my-donation')
+        {
+            navigator('/dashboard/mydonation')
+
+        }
+        else{
         navigator('/dashboard')
+        }
         
 
     }
