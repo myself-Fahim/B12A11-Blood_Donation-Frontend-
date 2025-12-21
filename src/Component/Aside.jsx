@@ -21,7 +21,7 @@ const Aside = () => {
                     </label>
                 </div>
 
-                <div className="drawer-side h-screen">
+               {role && <div className="drawer-side h-screen">
                     <label
                         htmlFor="my-drawer-3"
                         aria-label="close sidebar"
@@ -30,7 +30,7 @@ const Aside = () => {
 
                     {/* IMPORTANT: use h-screen (not min-h-full) */}
                     <ul className="menu bg-red-950 text-white h-screen w-80 p-4 overflow-y-auto">
-                        <h1 className="text-3xl font-bold mb-8">{String(role).toUpperCase()} PANEL</h1>
+                       <h1 className="text-3xl font-bold mb-8">{String(role).toUpperCase()} PANEL</h1>
 
                         <div className="flex flex-col">
                             <NavLink to="/dashboard" end className="text-xl font-bold mb-3 py-2 px-2">
@@ -51,7 +51,7 @@ const Aside = () => {
                             }
                         </div>
                     </ul>
-                </div>
+                </div>}
             </div>
         </div>
     );
