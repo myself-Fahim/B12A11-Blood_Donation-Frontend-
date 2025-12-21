@@ -49,6 +49,13 @@ const Aside = () => {
                                     My Donation
                                 </NavLink>
                             }
+
+                            {
+                                role == 'admin' && <NavLink to='/dashboard/admin/alluser' className='text-xl font-bold py-2 px-2 mb-5'>All User</NavLink>
+                            }
+                            {
+                                role == 'admin' && <NavLink to='/dashboard/admin/allrequest' className='text-xl font-bold py-2 px-2 mb-5'>All Donation</NavLink>
+                            }
                         </div>
                     </ul>
                 </div>}

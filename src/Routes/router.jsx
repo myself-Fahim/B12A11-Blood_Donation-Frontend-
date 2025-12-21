@@ -12,6 +12,8 @@ import AddRequest from "../Dashboard/AddRequest";
 import PrivateRoute from "./PrivateRoute";
 import UpdateDonation from "../Dashboard/UpdateDonation";
 import DonationDetails from "../Dashboard/DonationDetails";
+import AllUser from "../Dashboard/AllUser";
+import AllDonation from "../Dashboard/AllDonation";
 
 
 
@@ -65,6 +67,14 @@ const router = createBrowserRouter([
             {
                 path:'donation-request-details/:id',
                 element:<DonationDetails></DonationDetails>
+            },
+            {
+                path:'/dashboard/admin/alluser',
+                element:<AllUser></AllUser>
+            },
+            {
+                path:'/dashboard/admin/allrequest',
+                element:<AllDonation></AllDonation>
             },
         ]
     }

@@ -57,6 +57,10 @@ const UpdateDonation = () => {
             navigator('/dashboard/mydonation')
 
         }
+        else if(location.state == 'all-donation')
+        {
+            navigator('/dashboard/admin/allrequest')
+        }
         else{
         navigator('/dashboard')
         }

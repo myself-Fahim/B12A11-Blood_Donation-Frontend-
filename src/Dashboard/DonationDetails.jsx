@@ -19,8 +19,6 @@ const DonationDetails = () => {
 
 
 
-    console.log(detailInfo)
-
     const handleDonation = (e) => {
         e.preventDefault()
         const newDonation = { ...detailInfo, status: 'inprogress' }

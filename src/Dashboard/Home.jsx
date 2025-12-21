@@ -11,8 +11,8 @@ const DashboardHome = () => {
     const { user, role } = useContext(AuthContext)
     const axiosSecure = useAxiosSecure()
     const [requestInfo, setRequestInfo] = useState(null)
-    const [totalUser,setTotalUser] = useState(null)
-    const [totalreq,setTotalreq] = useState(null)
+    const [totalUser, setTotalUser] = useState(null)
+    const [totalreq, setTotalreq] = useState(null)
     const reqId = useRef(null)
 
     const navigator = useNavigate()
@@ -21,18 +21,18 @@ const DashboardHome = () => {
         navigator(`/dashboard/updatedonation/${id}`)
     }
 
-    useEffect(()=>{
+    useEffect(() => {
         axiosSecure('/users')
-        .then(res=>setTotalUser(res.data))
-        .catch(err=>console.log(err))
-    },[axiosSecure])
+            .then(res => setTotalUser(res.data))
+            .catch(err => console.log(err))
+    }, [axiosSecure])
 
 
-    useEffect(()=>{
+    useEffect(() => {
         axiosSecure('/request')
-        .then(res=>setTotalreq(res.data))
-        .catch(err=>console.log(err))
-    },[axiosSecure])
+            .then(res => setTotalreq(res.data))
+            .catch(err => console.log(err))
+    }, [axiosSecure])
 
 
     useEffect(() => {
@@ -45,7 +45,6 @@ const DashboardHome = () => {
     }, [user, axiosSecure])
 
 
-    console.log(user?.email)
 
 
     const handleDelete = (id) => {
@@ -69,17 +68,20 @@ const DashboardHome = () => {
         navigator(`/dashboard/donation-request-details/${id}`)
 
     }
+
+
     return (
         <div >
             <h1 className='text-3xl text-center mt-15'>Welcome <span className='font-bold  text-red-950'>{user.displayName}!</span></h1>
 
             {
-                role == 'donor' && <div>
+                role == 'donor' && 
+                <div>
                     <h1 className='font-bold text-3xl mt-20 pl-[20px] lg:pl-[70px] mb-8'>Recent Donation</h1>
                     <div className="overflow-x-auto mx-4 lg:mx-10">
                         {
                             requestInfo ? requestInfo.length > 0 ?
-                                <table className="table  shadow-2xl md:max-w-[1000px] pl-5 md:pl-20 mb-[50px]">
+                                <table className="table  shadow-2xl md:max-w-[1000px] pl-5 md:pl-20 mb-[50px] ">
                                     {/* head */}
                                     <thead >
                                         <tr className='text-xl font-bold'>
@@ -123,7 +125,7 @@ const DashboardHome = () => {
                                         }
                                     </tbody>
 
-                                   
+
 
 
 
@@ -155,35 +157,40 @@ const DashboardHome = () => {
                 </div>
             }
 
-          
-    
+
+
 
             {
-                
-                (role == 'admin' || role == 'volunteer')  && (
-                <div className='mt-20 flex flex-col lg:flex-row items-center justify-center gap-5'>
+
+                (role == 'admin' || role == 'volunteer') &&
+
+
+                    (totalUser && totalreq) ? <div className='mt-20 flex flex-col lg:flex-row items-center justify-center gap-5'>
                     <div className='shadow-2xl px-8 py-6'>
                         <div className='flex items-center gap-2 mb-4'>
                             <FaUsersLine className='text-5xl'></FaUsersLine>
                             <h1 className='text-3xl font-bold'>Total Register </h1>
                         </div>
-                       <h1 className='font-bold text-5xl text-red-900 text-center'>{totalUser?.length}</h1>
+                        <h1 className='font-bold text-5xl text-red-900 text-center'>{totalUser?.length}</h1>
                     </div>
                     <div className='shadow-2xl px-8 py-6'>
                         <div className='flex items-center gap-2 mb-4'>
-                           <RiRefund2Fill className='text-5xl' />
+                            <RiRefund2Fill className='text-5xl' />
                             <h1 className='text-3xl font-bold'>Total Funding</h1>
                         </div>
-                       <h1 className='font-bold text-5xl text-red-900 text-center'>50 $</h1>
+                        <h1 className='font-bold text-5xl text-red-900 text-center'>50 $</h1>
                     </div>
                     <div className='shadow-2xl px-8 py-6'>
                         <div className='flex items-center gap-2 mb-4'>
                             <BiSolidDonateBlood className='text-5xl'></BiSolidDonateBlood>
                             <h1 className='text-3xl font-bold'>Total Request</h1>
                         </div>
-                       <h1 className='font-bold text-5xl text-red-900 text-center'>{totalreq?.length}</h1>
+                        <h1 className='font-bold text-5xl text-red-900 text-center'>{totalreq?.length}</h1>
                     </div>
-                </div>)
+                </div> : <Loader></Loader>
+
+
+
             }
 
 
