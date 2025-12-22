@@ -68,7 +68,7 @@ const Register = () => {
                     })
                     // console.log(result.user)
                     setUser(result.user)
-                    axios.post('http://localhost:5000/users', formData)
+                    axios.post('https://blood-donation-rho-one.vercel.app/users', formData)
                         .then(res => toast.success('Successfully Registered'))
                     // e.target.reset()
                     navigator('/')

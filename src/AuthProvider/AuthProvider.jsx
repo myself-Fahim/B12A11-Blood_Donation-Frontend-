@@ -35,7 +35,7 @@ const AuthProvider = ({ children }) => {
     useEffect(() => {
         if (!user)
             return
-        axios(`http://localhost:5000/users/role/${user?.email}`)
+        axios(`https://blood-donation-rho-one.vercel.app/users/role/${user?.email}`)
             .then(res => setRole(res.data.role))
     }, [user])
 
