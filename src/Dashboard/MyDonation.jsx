@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import useAxiosSecure from '../Hooks/useAxiosSecure';
 import AuthContext from '../AuthProvider/AuthContext';
 import Loader from '../Component/Loader';
@@ -11,11 +11,17 @@ const MyDonation = () => {
     const [requestInfo, setRequestInfo] = useState(null)
     const navigator = useNavigate()
     const reqId = useRef(null)
+    const[filterInfo,setFilterInfo] = useState(null)
+    const [loading,setLoading] = useState(true)
 
     useEffect(() => {
         axiosSecure(`/request/all-request/${user?.email}`)
-            .then(res => setRequestInfo(res.data))
+            .then(res => {
+                setRequestInfo(res.data || [])
+                setFilterInfo(res.data || [])
+            })
             .catch(err => console.log(err))
+            .finally(()=>setLoading(false))
     }, [axiosSecure, user?.email])
 
     const handleEdit = (id) => {
@@ -49,9 +55,9 @@ const MyDonation = () => {
 
 
 
-        const handleDone = (id) =>{
+    const handleDone = (id) => {
 
-         const singleUser = requestInfo.find(user => user._id == id)
+        const singleUser = requestInfo.find(user => user._id == id)
         const updatedData = { ...singleUser, status: 'done' }
 
         setRequestInfo((prev) =>
@@ -70,9 +76,9 @@ const MyDonation = () => {
 
     }
 
-    const handleCancel = (id) =>{
+    const handleCancel = (id) => {
 
-         const singleUser = requestInfo.find(user => user._id == id)
+        const singleUser = requestInfo.find(user => user._id == id)
         const updatedData = { ...singleUser, status: 'canceled' }
 
         setRequestInfo((prev) =>
@@ -91,18 +97,10 @@ const MyDonation = () => {
 
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
+    const handleStatus=(statuss)=>{
+        const newInfo = (statuss == 'All') ? requestInfo : requestInfo.filter(info => info.status == statuss) 
+        setFilterInfo(newInfo)
+    }
 
 
     return (
@@ -110,11 +108,21 @@ const MyDonation = () => {
         <div>
 
             <h1 className='text-center text-red-800 text-2xl font-bold mt-10 mb-10'>My Donation Request</h1>
+            <div className='flex flex-col lg:flex-row items-center justify-center ml-4 mb-5 gap-2'>
+                <h1 className='font-bold text-2xl'>Choose Status :</h1>
+                <select onChange={(e)=>handleStatus(e.target.value)} name='statusChoose' defaultValue="All" className="select select-primary">
+                    <option >All</option>
+                    <option>inprogress</option>
+                    <option>pending</option>
+                    <option>done</option>
+                    <option>canceled</option>
+                </select>
+            </div>
             {
-                requestInfo ?
+                !loading ?
                     <div className="overflow-x-auto mx-4 lg:mx-10">
                         {
-                            requestInfo ? requestInfo.length > 0 ?
+                            filterInfo ? filterInfo.length > 0 ?
                                 <table className="table  shadow-2xl md:max-w-[1000px] pl-5 md:pl-20 mb-[50px]">
                                     {/* head */}
                                     <thead >
@@ -132,7 +140,7 @@ const MyDonation = () => {
 
                                     <tbody>
                                         {
-                                            requestInfo.map(request => <tr key={request._id}>
+                                            filterInfo.map(request => <tr key={request._id}>
 
                                                 <td className=' font-semibold'>
                                                     {request.recipient}

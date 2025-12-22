@@ -7,6 +7,8 @@ import Loader from '../Component/Loader';
 const AllUser = () => {
     const axiosSecure = useAxiosSecure()
     const [totalUser, setTotalUser] = useState(null)
+    const [filterUser, setFilterUser] = useState(null)
+    const [loading, setLoading] = useState(true)
 
 
 
@@ -14,18 +16,20 @@ const AllUser = () => {
     useEffect(() => {
         axiosSecure('/users')
             .then(res => {
-        
-                setTotalUser(res.data)
+
+                setTotalUser(res.data || [])
+                setFilterUser(res.data || [])
             })
             .catch(err => console.log(err))
+            .finally(()=>setLoading(false))
     }, [axiosSecure])
 
 
 
     const handleBlock = (id) => {
-        const singleUser = totalUser.find(user => user._id == id)
+        const singleUser = filterUser.find(user => user._id == id)
         const updatedData = { ...singleUser, status: 'block' }
-        setTotalUser((prev) =>
+        setFilterUser((prev) =>
             prev?.map((u) => (u._id === id ? { ...u, status: "block" } : u))
         );
 
@@ -34,7 +38,7 @@ const AllUser = () => {
             .catch(err => {
                 console.log(err)
 
-                setTotalUser((prev) =>
+                setFilterUser((prev) =>
                     prev?.map((u) => (u._id === id ? { ...u, status: "active" } : u))
                 );
             })
@@ -42,10 +46,10 @@ const AllUser = () => {
     }
 
     const handleUnblock = (id) => {
-        const singleUser = totalUser.find(user => user._id == id)
+        const singleUser = filterUser.find(user => user._id == id)
         const updatedData = { ...singleUser, status: 'active' }
 
-        setTotalUser((prev) =>
+        setFilterUser((prev) =>
             prev?.map((u) => (u._id === id ? { ...u, status: "active" } : u))
         );
 
@@ -54,20 +58,20 @@ const AllUser = () => {
             .catch(err => {
                 console.log(err)
 
-                setTotalUser((prev) =>
+                setFilterUser((prev) =>
                     prev?.map((u) => (u._id === id ? { ...u, status: "block" } : u))
                 );
             })
 
     }
 
-    const makeVolunteer = (id) =>{
+    const makeVolunteer = (id) => {
 
-        const singleUser = totalUser.find(user => user._id == id)
+        const singleUser = filterUser.find(user => user._id == id)
         const prevRole = singleUser.role
         const updatedData = { ...singleUser, role: 'volunteer' }
 
-        setTotalUser((prev) =>
+        setFilterUser((prev) =>
             prev?.map((u) => (u._id === id ? { ...u, role: 'volunteer' } : u))
         );
 
@@ -76,18 +80,18 @@ const AllUser = () => {
             .catch(err => {
                 console.log(err)
 
-                setTotalUser((prev) =>
+                setFilterUser((prev) =>
                     prev?.map((u) => (u._id === id ? { ...u, role: prevRole } : u))
                 );
             })
     }
-    const makeAdmin = (id) =>{
+    const makeAdmin = (id) => {
 
-        const singleUser = totalUser.find(user => user._id == id)
+        const singleUser = filterUser.find(user => user._id == id)
         const prevRole = singleUser.role
         const updatedData = { ...singleUser, role: 'admin' }
 
-        setTotalUser((prev) =>
+        setFilterUser((prev) =>
             prev?.map((u) => (u._id === id ? { ...u, role: 'admin' } : u))
         );
 
@@ -96,10 +100,17 @@ const AllUser = () => {
             .catch(err => {
                 console.log(err)
 
-                setTotalUser((prev) =>
+                setFilterUser((prev) =>
                     prev?.map((u) => (u._id === id ? { ...u, role: prevRole } : u))
                 );
-            })
+            }
+        )
+    }
+
+    
+    const handleStatus = (statuss) => {
+        const newInfo = (statuss == 'All') ? totalUser : totalUser.filter(info => info.status == statuss)
+        setFilterUser(newInfo)
     }
 
 
@@ -108,10 +119,21 @@ const AllUser = () => {
 
     return (
         <div>
-            <div className="overflow-x-auto mt-12 px-10">
 
+            <div className='flex flex-col lg:flex-row items-center justify-center ml-4 mt-10 gap-2'>
+                <h1 className='font-bold text-2xl'>Choose Status :</h1>
+                <select onChange={(e) => handleStatus(e.target.value)} name='statusChoose' defaultValue="All" className="select select-primary">
+                    <option >All</option>
+                    <option>active</option>
+                    <option>block</option>
+                
+                </select>
+            </div>
+
+
+            <div className="overflow-x-auto mt-10 px-10">
                 {
-                    totalUser ? totalUser.length > 0 ?
+                    filterUser ? filterUser.length > 0 ?
                         <table className="table  mx-auto shadow-2xl  pl-8 py-3 mb-[50px]">
                             {/* head */}
                             <thead >
@@ -127,7 +149,7 @@ const AllUser = () => {
 
                             <tbody>
                                 {
-                                    totalUser.map(userr => <tr key={userr._id}>
+                                    filterUser.map(userr => <tr key={userr._id}>
 
                                         <td className=' font-semibold'>
                                             <div className="avatar">
@@ -153,10 +175,10 @@ const AllUser = () => {
                                             <button onClick={() => handleUnblock(userr._id)} className='btn btn-success'>Unblock</button>
                                         </td>
                                         <td>
-                                            <button onClick={()=>makeVolunteer(userr._id)} className='btn btn-primary'>Make Volunteer</button>
+                                            <button onClick={() => makeVolunteer(userr._id)} className='btn btn-primary'>Make Volunteer</button>
                                         </td>
                                         <td>
-                                            <button onClick={()=>makeAdmin(userr._id)} className='btn btn-active'>Make Admin</button>
+                                            <button onClick={() => makeAdmin(userr._id)} className='btn btn-active'>Make Admin</button>
                                         </td>
 
 

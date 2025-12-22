@@ -14,15 +14,18 @@ const AllDonation = () => {
     const reqId = useRef(null)
     const navigator = useNavigate()
     const { role } = useContext(AuthContext)
-
+    const [filterInfo, setFilterInfo] = useState(null)
+    const [loading, setLoading] = useState(true)
 
     useEffect(() => {
         axiosSecure('/request')
             .then(res => {
 
-                setRequestInfo(res.data)
+                setRequestInfo(res.data || [])
+                setFilterInfo(res.data || [])
             })
             .catch(err => console.log(err))
+            .finally(() => setLoading(false))
     }, [axiosSecure])
 
 
@@ -31,8 +34,8 @@ const AllDonation = () => {
         axiosSecure.delete(`/request/id/delete/${id}`)
             .then(res => console.log(res.data))
             .catch(err => console.log(err))
-        const newReq = requestInfo.filter(info => info._id != id)
-        setRequestInfo(newReq)
+        const newReq = filterInfo.filter(info => info._id != id)
+        setFilterInfo(newReq)
         document.getElementById('my_modal_3').close()
 
     }
@@ -54,12 +57,12 @@ const AllDonation = () => {
     }
 
 
-    const handleDone = (id) =>{
+    const handleDone = (id) => {
 
-         const singleUser = requestInfo.find(user => user._id == id)
+        const singleUser = filterInfo.find(user => user._id == id)
         const updatedData = { ...singleUser, status: 'done' }
 
-        setRequestInfo((prev) =>
+        setFilterInfo((prev) =>
             prev?.map((u) => (u._id === id ? { ...u, status: "done" } : u))
         );
 
@@ -68,19 +71,19 @@ const AllDonation = () => {
             .catch(err => {
                 console.log(err)
 
-                setRequestInfo((prev) =>
+                setFilterInfo((prev) =>
                     prev?.map((u) => (u._id === id ? { ...u, status: "inprogress" } : u))
                 );
             })
 
     }
 
-    const handleCancel = (id) =>{
+    const handleCancel = (id) => {
 
-         const singleUser = requestInfo.find(user => user._id == id)
+        const singleUser = filterInfo.find(user => user._id == id)
         const updatedData = { ...singleUser, status: 'canceled' }
 
-        setRequestInfo((prev) =>
+        setFilterInfo((prev) =>
             prev?.map((u) => (u._id === id ? { ...u, status: "canceled" } : u))
         );
 
@@ -89,28 +92,38 @@ const AllDonation = () => {
             .catch(err => {
                 console.log(err)
 
-                setRequestInfo((prev) =>
+                setFilterInfo((prev) =>
                     prev?.map((u) => (u._id === id ? { ...u, status: "inprogress" } : u))
                 );
             })
 
     }
 
-  
 
-
-
-
-
-
+    const handleStatus = (statuss) => {
+        const newInfo = (statuss == 'All') ? requestInfo : requestInfo.filter(info => info.status == statuss)
+        setFilterInfo(newInfo)
+    }
 
 
     return (
         <div>
-            <div className='mt-15'>
+            <div className='flex flex-col lg:flex-row items-center justify-center ml-4 mt-10 gap-2'>
+                <h1 className='font-bold text-2xl'>Choose Status :</h1>
+                <select onChange={(e) => handleStatus(e.target.value)} name='statusChoose' defaultValue="All" className="select select-primary">
+                    <option >All</option>
+                    <option>inprogress</option>
+                    <option>pending</option>
+                    <option>done</option>
+                    <option>canceled</option>
+                </select>
+            </div>
+
+
+            <div className='mt-10'>
                 <div className="overflow-x-auto mx-4 lg:mx-10">
                     {
-                        requestInfo ? requestInfo.length > 0 ?
+                        filterInfo ? filterInfo.length > 0 ?
                             <table className="table  shadow-2xl md:max-w-[1000px] pl-5 md:pl-20 mb-[50px] ">
                                 {/* head */}
                                 <thead >
@@ -128,7 +141,7 @@ const AllDonation = () => {
 
                                 <tbody>
                                     {
-                                        requestInfo.map(request => <tr key={request._id}>
+                                        filterInfo.map(request => <tr key={request._id}>
 
                                             <td className=' font-semibold'>
                                                 {request.recipient}
@@ -161,13 +174,13 @@ const AllDonation = () => {
 
                                             {
                                                 request.status == 'inprogress' && <td>
-                                                    <button onClick={()=>handleDone(request._id)} className='btn bg-green-600 text-white font-bold'>Done</button>
+                                                    <button onClick={() => handleDone(request._id)} className='btn bg-green-600 text-white font-bold'>Done</button>
                                                 </td>
                                             }
 
                                             {
                                                 request.status == 'inprogress' && <td>
-                                                    <button onClick={()=>handleCancel(request._id)} className='btn bg-red-800 text-white font-bold'>Cancel</button>
+                                                    <button onClick={() => handleCancel(request._id)} className='btn bg-red-800 text-white font-bold'>Cancel</button>
                                                 </td>
                                             }
 
