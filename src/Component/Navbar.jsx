@@ -36,7 +36,7 @@ const Navbar = () => {
                         </div>
                         <div className=' hidden md:flex items-center gap-2'>
                             <div className='w-[30px] h-[30px] '>
-                                <img src="https://i.ibb.co.com/Kpbv5Bpp/a4c2a2a9ba9fda58fc3fcdf92d806dda-love-pet-shop-logo-design.jpg"
+                                <img src="https://i.ibb.co.com/JRZxnf9H/blood-drop-with-plus-heart-shape-blood-donation-concept-blood-donation-logo-illustration-vector.jpg"
                                     className='w-full h-full rounded-full object-cover' />
                             </div>
 
