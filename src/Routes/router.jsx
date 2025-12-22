@@ -1,5 +1,4 @@
 import { createBrowserRouter } from "react-router";
-
 import Login from "../Pages/login";
 import Register from "../Pages/register";
 import Home from "../Pages/Home";
@@ -14,6 +13,8 @@ import UpdateDonation from "../Dashboard/UpdateDonation";
 import DonationDetails from "../Dashboard/DonationDetails";
 import AllUser from "../Dashboard/AllUser";
 import AllDonation from "../Dashboard/AllDonation";
+import Search from "../Pages/Search";
+import DonationPublic from "../Pages/DonationPublic";
 
 
 
@@ -26,6 +27,15 @@ const router = createBrowserRouter([
             {
                 path:'/',
                 Component:Home
+            },
+            {
+                path:'search',
+                Component:Search
+            },
+
+            {
+                path:'donation',
+                Component:DonationPublic
             },
             {
                 path:'login',

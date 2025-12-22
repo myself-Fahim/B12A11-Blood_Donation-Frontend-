@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { NavLink } from "react-router";
+import { Link, NavLink } from "react-router";
 import AuthContext from "../AuthProvider/AuthContext";
 import useAxiosSecure from "../Hooks/useAxiosSecure";
 import toast, { Toaster } from 'react-hot-toast';
@@ -20,9 +20,9 @@ const Aside = () => {
             .catch(err => console.log(err))
     }, [axiosSecure])
 
-    
-        const isBlocked = modifyUser?.status === "block"
-    
+
+    const isBlocked = modifyUser?.status === "block"
+
 
 
     return (
@@ -65,24 +65,14 @@ const Aside = () => {
                                 role == 'donor' &&
 
 
-                                ( 
+                                (
 
                                     isBlocked ? (<span className="text-xl font-bold py-2 px-2 mb-3 ">
                                         Add User (Blocked)
-                                    </span>) : (  <NavLink to="/dashboard/request" className="text-xl font-bold py-2 px-2 mb-3">
-                                    Add Request
-                                </NavLink>)
-                                    
-
-
-
-
-
-                                
-                                 
-                            
-                            )
-
+                                    </span>) : (<NavLink to="/dashboard/request" className="text-xl font-bold py-2 px-2 mb-3">
+                                        Add Request
+                                    </NavLink>)
+                                )
 
                             }
                             {
@@ -97,9 +87,14 @@ const Aside = () => {
                             {
                                 (role == 'admin' || role == 'volunteer') && <NavLink to='/dashboard/admin/allrequest' className='text-xl font-bold py-2 px-2 mb-5'>All Donation</NavLink>
                             }
+                            <Link to='/' className="mt-25 text-start bg-white text-black px-5 py-2 font-bold w-fit rounded-[20px]">Go to Home  ➜</Link>
+
+
                         </div>
                     </ul>
+
                 </div>}
+
             </div>
         </div>
     );

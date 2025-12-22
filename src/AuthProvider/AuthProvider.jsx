@@ -3,7 +3,7 @@ import AuthContext from './AuthContext';
 import { onAuthStateChanged } from 'firebase/auth';
 import auth from '../Firebase/Firebase.init';
 import axios from 'axios';
-import useAxiosSecure from '../Hooks/useAxiosSecure';
+
 
 const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null)
