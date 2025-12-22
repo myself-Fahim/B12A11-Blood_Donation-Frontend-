@@ -10,14 +10,102 @@ const AllUser = () => {
 
 
 
+
     useEffect(() => {
         axiosSecure('/users')
             .then(res => {
-                const nonAdmin = res.data.filter(data => data.role !== 'admin')
-                setTotalUser(nonAdmin)
+        
+                setTotalUser(res.data)
             })
             .catch(err => console.log(err))
     }, [axiosSecure])
+
+
+
+    const handleBlock = (id) => {
+        const singleUser = totalUser.find(user => user._id == id)
+        const updatedData = { ...singleUser, status: 'block' }
+        setTotalUser((prev) =>
+            prev?.map((u) => (u._id === id ? { ...u, status: "block" } : u))
+        );
+
+        axiosSecure.put(`/user/id/${id}`, updatedData)
+            .then(res => console.log(res.data))
+            .catch(err => {
+                console.log(err)
+
+                setTotalUser((prev) =>
+                    prev?.map((u) => (u._id === id ? { ...u, status: "active" } : u))
+                );
+            })
+
+    }
+
+    const handleUnblock = (id) => {
+        const singleUser = totalUser.find(user => user._id == id)
+        const updatedData = { ...singleUser, status: 'active' }
+
+        setTotalUser((prev) =>
+            prev?.map((u) => (u._id === id ? { ...u, status: "active" } : u))
+        );
+
+        axiosSecure.put(`/user/id/${id}`, updatedData)
+            .then(res => console.log(res.data))
+            .catch(err => {
+                console.log(err)
+
+                setTotalUser((prev) =>
+                    prev?.map((u) => (u._id === id ? { ...u, status: "block" } : u))
+                );
+            })
+
+    }
+
+    const makeVolunteer = (id) =>{
+
+        const singleUser = totalUser.find(user => user._id == id)
+        const prevRole = singleUser.role
+        const updatedData = { ...singleUser, role: 'volunteer' }
+
+        setTotalUser((prev) =>
+            prev?.map((u) => (u._id === id ? { ...u, role: 'volunteer' } : u))
+        );
+
+        axiosSecure.put(`/user/id/${id}`, updatedData)
+            .then(res => console.log(res.data))
+            .catch(err => {
+                console.log(err)
+
+                setTotalUser((prev) =>
+                    prev?.map((u) => (u._id === id ? { ...u, role: prevRole } : u))
+                );
+            })
+    }
+    const makeAdmin = (id) =>{
+
+        const singleUser = totalUser.find(user => user._id == id)
+        const prevRole = singleUser.role
+        const updatedData = { ...singleUser, role: 'admin' }
+
+        setTotalUser((prev) =>
+            prev?.map((u) => (u._id === id ? { ...u, role: 'admin' } : u))
+        );
+
+        axiosSecure.put(`/user/id/${id}`, updatedData)
+            .then(res => console.log(res.data))
+            .catch(err => {
+                console.log(err)
+
+                setTotalUser((prev) =>
+                    prev?.map((u) => (u._id === id ? { ...u, role: prevRole } : u))
+                );
+            })
+    }
+
+
+
+
+
     return (
         <div>
             <div className="overflow-x-auto mt-12 px-10">
@@ -59,16 +147,16 @@ const AllUser = () => {
 
 
                                         <td>
-                                            <button className='btn btn-error'>Block</button>
+                                            <button onClick={() => handleBlock(userr._id)} className='btn btn-error'>Block</button>
                                         </td>
                                         <td>
-                                            <button className='btn btn-success'>Unblock</button>
+                                            <button onClick={() => handleUnblock(userr._id)} className='btn btn-success'>Unblock</button>
                                         </td>
                                         <td>
-                                            <button className='btn btn-primary'>Make Volunteer</button>
+                                            <button onClick={()=>makeVolunteer(userr._id)} className='btn btn-primary'>Make Volunteer</button>
                                         </td>
                                         <td>
-                                            <button className='btn btn-active'>Make Admin</button>
+                                            <button onClick={()=>makeAdmin(userr._id)} className='btn btn-active'>Make Admin</button>
                                         </td>
 
 

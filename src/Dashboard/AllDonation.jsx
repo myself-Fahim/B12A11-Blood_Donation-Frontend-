@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { useEffect } from 'react';
 import useAxiosSecure from '../Hooks/useAxiosSecure';
 import { useRef } from 'react';
 import { useState } from 'react';
 import Loader from '../Component/Loader';
 import { useNavigate } from 'react-router';
+import AuthContext from '../AuthProvider/AuthContext';
 
 
 const AllDonation = () => {
@@ -12,6 +13,7 @@ const AllDonation = () => {
     const [requestInfo, setRequestInfo] = useState(null)
     const reqId = useRef(null)
     const navigator = useNavigate()
+    const { role } = useContext(AuthContext)
 
 
     useEffect(() => {
@@ -37,7 +39,7 @@ const AllDonation = () => {
 
 
     const handleEdit = (id) => {
-        navigator(`/dashboard/updatedonation/${id}`,{state:'all-donation'})
+        navigator(`/dashboard/updatedonation/${id}`, { state: 'all-donation' })
     }
 
     const openDeleteModal = (id) => {
@@ -50,6 +52,51 @@ const AllDonation = () => {
     const handleView = (id) => {
         navigator(`/dashboard/donation-request-details/${id}`)
     }
+
+
+    const handleDone = (id) =>{
+
+         const singleUser = requestInfo.find(user => user._id == id)
+        const updatedData = { ...singleUser, status: 'done' }
+
+        setRequestInfo((prev) =>
+            prev?.map((u) => (u._id === id ? { ...u, status: "done" } : u))
+        );
+
+        axiosSecure.put(`/update/id/${id}`, updatedData)
+            .then(res => console.log(res.data))
+            .catch(err => {
+                console.log(err)
+
+                setRequestInfo((prev) =>
+                    prev?.map((u) => (u._id === id ? { ...u, status: "inprogress" } : u))
+                );
+            })
+
+    }
+
+    const handleCancel = (id) =>{
+
+         const singleUser = requestInfo.find(user => user._id == id)
+        const updatedData = { ...singleUser, status: 'canceled' }
+
+        setRequestInfo((prev) =>
+            prev?.map((u) => (u._id === id ? { ...u, status: "canceled" } : u))
+        );
+
+        axiosSecure.put(`/update/id/${id}`, updatedData)
+            .then(res => console.log(res.data))
+            .catch(err => {
+                console.log(err)
+
+                setRequestInfo((prev) =>
+                    prev?.map((u) => (u._id === id ? { ...u, status: "inprogress" } : u))
+                );
+            })
+
+    }
+
+  
 
 
 
@@ -94,15 +141,40 @@ const AllDonation = () => {
                                             <td className=' px-4 py-2 font-semibold'>{request.bloodGrp}</td>
                                             <td className=' px-4 py-2 font-semibold'>{request.status}</td>
                                             <td className=' px-4 py-2 font-semibold'>{`${request.requester}, ${request.requesterEmail}`}</td>
-                                            <td>
-                                                <button onClick={() => handleEdit(request._id)} className='btn btn-primary'>Edit</button>
-                                            </td>
-                                            <td>
-                                                <button onClick={() => openDeleteModal(request._id)} className='btn btn-error'>Delete</button>
-                                            </td>
+
+                                            {
+                                                role == 'admin' && <td>
+                                                    <button onClick={() => handleEdit(request._id)} className='btn btn-primary'>Edit</button>
+                                                </td>
+                                            }
+
+                                            {
+                                                role == 'admin' && <td>
+                                                    <button onClick={() => openDeleteModal(request._id)} className='btn btn-error'>Delete</button>
+                                                </td>
+
+                                            }
+
                                             <td>
                                                 <button onClick={() => handleView(request._id)} className='btn btn-warning'>View</button>
                                             </td>
+
+                                            {
+                                                request.status == 'inprogress' && <td>
+                                                    <button onClick={()=>handleDone(request._id)} className='btn bg-green-600 text-white font-bold'>Done</button>
+                                                </td>
+                                            }
+
+                                            {
+                                                request.status == 'inprogress' && <td>
+                                                    <button onClick={()=>handleCancel(request._id)} className='btn bg-red-800 text-white font-bold'>Cancel</button>
+                                                </td>
+                                            }
+
+
+
+
+
 
                                         </tr>)
                                     }

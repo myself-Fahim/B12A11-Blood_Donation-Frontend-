@@ -1,12 +1,34 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { NavLink } from "react-router";
 import AuthContext from "../AuthProvider/AuthContext";
+import useAxiosSecure from "../Hooks/useAxiosSecure";
+import toast, { Toaster } from 'react-hot-toast';
 
 const Aside = () => {
 
-    const { role } = useContext(AuthContext)
+    const { role, user } = useContext(AuthContext)
+    const axiosSecure = useAxiosSecure()
+    const [modifyUser, setModifyUser] = useState(null)
+
+
+    useEffect(() => {
+        axiosSecure('/users')
+            .then(res => {
+                const loginUser = res.data.find(data => data.email == user.email)
+                setModifyUser(loginUser)
+            })
+            .catch(err => console.log(err))
+    }, [axiosSecure])
+
+    
+        const isBlocked = modifyUser?.status === "block"
+    
+
+
     return (
         <div className="h-screen">
+            <Toaster></Toaster>
+
             <div className="drawer lg:drawer-open h-screen">
                 <input id="my-drawer-3" type="checkbox" className="drawer-toggle" />
 
@@ -21,7 +43,7 @@ const Aside = () => {
                     </label>
                 </div>
 
-               {role && <div className="drawer-side h-screen">
+                {role && <div className="drawer-side h-screen">
                     <label
                         htmlFor="my-drawer-3"
                         aria-label="close sidebar"
@@ -30,7 +52,7 @@ const Aside = () => {
 
                     {/* IMPORTANT: use h-screen (not min-h-full) */}
                     <ul className="menu bg-red-950 text-white h-screen w-80 p-4 overflow-y-auto">
-                       <h1 className="text-3xl font-bold mb-8">{String(role).toUpperCase()} PANEL</h1>
+                        <h1 className="text-3xl font-bold mb-8">{String(role).toUpperCase()} PANEL</h1>
 
                         <div className="flex flex-col">
                             <NavLink to="/dashboard" end className="text-xl font-bold mb-3 py-2 px-2">
@@ -40,9 +62,28 @@ const Aside = () => {
                                 Profile
                             </NavLink>
                             {
-                                role == 'donor' && <NavLink to="/dashboard/request" className="text-xl font-bold py-2 px-2 mb-3">
+                                role == 'donor' &&
+
+
+                                ( 
+
+                                    isBlocked ? (<span className="text-xl font-bold py-2 px-2 mb-3 ">
+                                        Add User (Blocked)
+                                    </span>) : (  <NavLink to="/dashboard/request" className="text-xl font-bold py-2 px-2 mb-3">
                                     Add Request
-                                </NavLink>
+                                </NavLink>)
+                                    
+
+
+
+
+
+                                
+                                 
+                            
+                            )
+
+
                             }
                             {
                                 role == 'donor' && <NavLink to="/dashboard/mydonation" className="text-xl font-bold py-2 px-2 mb-5">
@@ -54,7 +95,7 @@ const Aside = () => {
                                 role == 'admin' && <NavLink to='/dashboard/admin/alluser' className='text-xl font-bold py-2 px-2 mb-5'>All User</NavLink>
                             }
                             {
-                                role == 'admin' && <NavLink to='/dashboard/admin/allrequest' className='text-xl font-bold py-2 px-2 mb-5'>All Donation</NavLink>
+                                (role == 'admin' || role == 'volunteer') && <NavLink to='/dashboard/admin/allrequest' className='text-xl font-bold py-2 px-2 mb-5'>All Donation</NavLink>
                             }
                         </div>
                     </ul>
