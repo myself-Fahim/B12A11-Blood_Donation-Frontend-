@@ -11,7 +11,7 @@ const AuthProvider = ({ children }) => {
     const [role, setRole] = useState(null)
     const [district, setDistrict] = useState([])
     const [upazila, setUpazila] = useState([])
- 
+
 
     useEffect(() => {
         axios('/District.json')
@@ -33,17 +33,22 @@ const AuthProvider = ({ children }) => {
 
 
     useEffect(() => {
-        if (!user)
-            return
-        axios(`https://blood-donation-rho-one.vercel.app/users/role/${user?.email}`)
-            .then(res => setRole(res.data.role))
-    }, [user])
+        if (!user?.email) {
+            setRole('donor'); 
+            return;
+        }
 
-   
+        axios(`https://blood-donation-rho-one.vercel.app/users/role/${user.email}`)
+            .then(res => setRole(res?.data?.role || 'donor')) // fallback if missing
+            .catch(() => setRole('donor')); // fallback if error
+    }, [user?.email]);
 
 
-   
 
+
+
+
+    
 
 
     const authInfo = {
@@ -54,7 +59,7 @@ const AuthProvider = ({ children }) => {
         setUser,
         district,
         upazila
-    
+
     }
     return (
         <div>

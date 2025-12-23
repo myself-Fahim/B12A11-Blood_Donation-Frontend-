@@ -24,9 +24,9 @@ const Home = () => {
             <div className='mb-10'>
                 <section id="contact" class="mx-auto max-w-5xl px-4 py-12">
                     <div class="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm md:p-10">
-                        <div class="mb-6">
-                            <h2 class="text-2xl font-semibold text-gray-900">Contact Us</h2>
-                            <p class="mt-2 text-sm text-gray-600">
+                        <div className="mb-6">
+                            <h2 className="text-2xl font-semibold text-gray-900">Contact Us</h2>
+                            <p classname="mt-2 text-sm text-gray-600">
                                 Send us a message and we’ll get back to you soon.
                             </p>
                         </div>

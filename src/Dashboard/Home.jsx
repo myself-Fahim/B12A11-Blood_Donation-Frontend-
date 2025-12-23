@@ -70,12 +70,13 @@ const DashboardHome = () => {
     }
 
 
+
     return (
         <div >
             <h1 className='text-3xl text-center mt-15'>Welcome <span className='font-bold  text-red-950'>{user.displayName}!</span></h1>
 
             {
-                role == 'donor' && 
+                role == 'donor' &&
                 <div>
                     <h1 className='font-bold text-3xl mt-20 pl-[20px] lg:pl-[70px] mb-8'>Recent Donation</h1>
                     <div className="overflow-x-auto mx-4 lg:mx-10">
