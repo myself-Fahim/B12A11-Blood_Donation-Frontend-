@@ -2,6 +2,10 @@ import { createBrowserRouter } from "react-router";
 import Login from "../Pages/login";
 import Register from "../Pages/register";
 import Home from "../Pages/Home";
+import About from "../Pages/About";
+import Contact from "../Pages/Contact";
+import Blog from "../Pages/Blog";
+import DonationDetails from "../Pages/DonationDetails";
 import Root from "../Layout/Root";
 import DashBoardLayout from "../dashboardLayout/dashBoardLayout";
 import DashboardHome from "../Dashboard/Home";
@@ -10,17 +14,14 @@ import MyDonation from "../Dashboard/MyDonation";
 import AddRequest from "../Dashboard/AddRequest";
 import PrivateRoute from "./PrivateRoute";
 import UpdateDonation from "../Dashboard/UpdateDonation";
-import DonationDetails from "../Dashboard/DonationDetails";
+import DonationDetailsPrivate from "../Dashboard/DonationDetails";
 import AllUser from "../Dashboard/AllUser";
 import AllDonation from "../Dashboard/AllDonation";
 import Search from "../Pages/Search";
 import DonationPublic from "../Pages/DonationPublic";
 
-
-
 const router = createBrowserRouter([
     {
-
         path:'/',
         Component:Root,
         children:[
@@ -32,10 +33,25 @@ const router = createBrowserRouter([
                 path:'search',
                 Component:Search
             },
-
             {
                 path:'donation',
                 Component:DonationPublic
+            },
+            {
+                path:'donation-details/:id',
+                Component:DonationDetails
+            },
+            {
+                path:'about',
+                Component:About
+            },
+            {
+                path:'contact',
+                Component:Contact
+            },
+            {
+                path:'blog',
+                Component:Blog
             },
             {
                 path:'login',
@@ -76,7 +92,7 @@ const router = createBrowserRouter([
             },
             {
                 path:'donation-request-details/:id',
-                element:<DonationDetails></DonationDetails>
+                element:<DonationDetailsPrivate></DonationDetailsPrivate>
             },
             {
                 path:'/dashboard/admin/alluser',

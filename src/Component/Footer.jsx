@@ -1,97 +1,178 @@
 import React from 'react';
+import { Link } from 'react-router';
+import { FiMail, FiPhone, FiMapPin, FiFacebook, FiTwitter, FiInstagram, FiLinkedin } from 'react-icons/fi';
+import { BiDonateBlood } from 'react-icons/bi';
 
 const Footer = () => {
+    const currentYear = new Date().getFullYear();
+
     return (
-        <div>
-            <footer class="bg-red-950 text-red-50">
-                <div class="mx-auto max-w-6xl px-4 py-12">
-                    <div class="grid gap-10 md:grid-cols-4">
-                      
-                        <div class="md:col-span-1">
-                            <div class="flex items-center gap-2">
-                                <span class="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-red-600 font-bold">
-                                    BD
-                                </span>
-                                <div>
-                                    <p class="text-lg font-semibold leading-tight">Blood Donation</p>
-                                    <p class="text-xs text-red-200">Give blood. Save lives.</p>
-                                </div>
+        <footer className="bg-gray-900 text-gray-300">
+            <div className="max-w-7xl mx-auto px-4 py-12">
+                <div className="grid gap-8 md:grid-cols-4">
+                    {/* Brand Section */}
+                    <div className="md:col-span-1">
+                        <div className="flex items-center gap-3 mb-4">
+                            <div className="flex items-center justify-center w-10 h-10 bg-red-600 rounded-full">
+                                <BiDonateBlood className="text-white text-xl" />
                             </div>
-                            <p class="mt-4 text-sm text-red-200">
-                                Find donors, book appointments, and learn how you can help your community.
-                            </p>
+                            <div>
+                                <h3 className="text-lg font-semibold text-white">BloodConnect</h3>
+                                <p className="text-xs text-gray-400">Save Lives Together</p>
+                            </div>
                         </div>
-
-                     
-                        <div>
-                            <h3 class="text-sm font-semibold text-white">Useful Links</h3>
-                            <ul class="mt-4 space-y-2 text-sm">
-                                <li><a class="text-red-200 hover:text-white" href="#donate">Donate Blood</a></li>
-                                <li><a class="text-red-200 hover:text-white" href="#request">Request Blood</a></li>
-                                <li><a class="text-red-200 hover:text-white" href="#find">Find Donors</a></li>
-                                <li><a class="text-red-200 hover:text-white" href="#contact">Contact Us</a></li>
-                            </ul>
-                        </div>
-
+                        <p className="text-sm text-gray-400 mb-6">
+                            Connecting blood donors with those in need. Every donation saves lives and strengthens our community.
+                        </p>
                         
-                        <div>
-                            <h3 class="text-sm font-semibold text-white">Learn</h3>
-                            <ul class="mt-4 space-y-2 text-sm">
-                                <li><a class="text-red-200 hover:text-white" href="#eligibility">Eligibility & Requirements</a></li>
-                                <li><a class="text-red-200 hover:text-white" href="#process">Donation Process</a></li>
-                                <li><a class="text-red-200 hover:text-white" href="#faq">FAQ</a></li>
-                                <li><a class="text-red-200 hover:text-white" href="#tips">Health & Safety Tips</a></li>
-                            </ul>
-                        </div>
-
-                      
-                        <div>
-                            <h3 class="text-sm font-semibold text-white">Contact</h3>
-                            <ul class="mt-4 space-y-3 text-sm text-red-200">
-                                <li class="flex items-start gap-2">
-                                    <span class="mt-0.5">📍</span>
-                                    <span>Dhaka, Bangladesh</span>
-                                </li>
-                                <li class="flex items-start gap-2">
-                                    <span class="mt-0.5">📞</span>
-                                    <a class="hover:text-white" href="tel:+8801000000000">+880 10-0000-0000</a>
-                                </li>
-                                <li class="flex items-start gap-2">
-                                    <span class="mt-0.5">✉️</span>
-                                    <a class="hover:text-white" href="mailto:hello@blooddonation.com">hello@blooddonation.com</a>
-                                </li>
-                            </ul>
-
-                         
-                            <a
-                                href="#donate"
-                                class="mt-5 inline-flex items-center justify-center rounded-xl bg-red-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-red-500 focus:outline-none focus:ring-2 focus:ring-red-400/40"
-                            >
-                                Become a Donor
+                        {/* Social Links */}
+                        <div className="flex space-x-4">
+                            <a href="#" className="text-gray-400 hover:text-red-400 transition-colors duration-200">
+                                <FiFacebook className="w-5 h-5" />
+                            </a>
+                            <a href="#" className="text-gray-400 hover:text-red-400 transition-colors duration-200">
+                                <FiTwitter className="w-5 h-5" />
+                            </a>
+                            <a href="#" className="text-gray-400 hover:text-red-400 transition-colors duration-200">
+                                <FiInstagram className="w-5 h-5" />
+                            </a>
+                            <a href="#" className="text-gray-400 hover:text-red-400 transition-colors duration-200">
+                                <FiLinkedin className="w-5 h-5" />
                             </a>
                         </div>
                     </div>
 
-                    <div class="mt-10 border-t border-red-900/60 pt-6 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-                        <p class="text-xs text-red-200">
-                            © <span id="year"></span> Blood Donation. All rights reserved.
-                        </p>
+                    {/* Quick Links */}
+                    <div>
+                        <h3 className="text-sm font-semibold text-white mb-4">Quick Links</h3>
+                        <ul className="space-y-2 text-sm">
+                            <li>
+                                <Link to="/donation" className="text-gray-400 hover:text-white transition-colors duration-200">
+                                    Find Blood Requests
+                                </Link>
+                            </li>
+                            <li>
+                                <Link to="/search" className="text-gray-400 hover:text-white transition-colors duration-200">
+                                    Search Donors
+                                </Link>
+                            </li>
+                            <li>
+                                <Link to="/register" className="text-gray-400 hover:text-white transition-colors duration-200">
+                                    Become a Donor
+                                </Link>
+                            </li>
+                            <li>
+                                <Link to="/about" className="text-gray-400 hover:text-white transition-colors duration-200">
+                                    About Us
+                                </Link>
+                            </li>
+                            <li>
+                                <Link to="/blog" className="text-gray-400 hover:text-white transition-colors duration-200">
+                                    Blog & Resources
+                                </Link>
+                            </li>
+                        </ul>
+                    </div>
 
-                        <div class="flex flex-wrap gap-x-4 gap-y-2 text-xs">
-                            <a class="text-red-200 hover:text-white" href="#privacy">Privacy Policy</a>
-                            <a class="text-red-200 hover:text-white" href="#terms">Terms of Service</a>
-                            <a class="text-red-200 hover:text-white" href="#cookies">Cookie Policy</a>
+                    {/* Support */}
+                    <div>
+                        <h3 className="text-sm font-semibold text-white mb-4">Support</h3>
+                        <ul className="space-y-2 text-sm">
+                            <li>
+                                <Link to="/contact" className="text-gray-400 hover:text-white transition-colors duration-200">
+                                    Contact Us
+                                </Link>
+                            </li>
+                            <li>
+                                <a href="#faq" className="text-gray-400 hover:text-white transition-colors duration-200">
+                                    FAQ
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#help" className="text-gray-400 hover:text-white transition-colors duration-200">
+                                    Help Center
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#privacy" className="text-gray-400 hover:text-white transition-colors duration-200">
+                                    Privacy Policy
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#terms" className="text-gray-400 hover:text-white transition-colors duration-200">
+                                    Terms of Service
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    {/* Contact Info */}
+                    <div>
+                        <h3 className="text-sm font-semibold text-white mb-4">Contact Info</h3>
+                        <ul className="space-y-3 text-sm text-gray-400">
+                            <li className="flex items-start gap-2">
+                                <FiMapPin className="w-4 h-4 mt-0.5 text-red-400 flex-shrink-0" />
+                                <span>123 Medical Center Road<br />Dhaka 1000, Bangladesh</span>
+                            </li>
+                            <li className="flex items-center gap-2">
+                                <FiPhone className="w-4 h-4 text-red-400 flex-shrink-0" />
+                                <a href="tel:+8801700000000" className="hover:text-white transition-colors duration-200">
+                                    +880 1700-000000
+                                </a>
+                            </li>
+                            <li className="flex items-center gap-2">
+                                <FiMail className="w-4 h-4 text-red-400 flex-shrink-0" />
+                                <a href="mailto:info@bloodconnect.com" className="hover:text-white transition-colors duration-200">
+                                    info@bloodconnect.com
+                                </a>
+                            </li>
+                        </ul>
+
+                        {/* Emergency Contact */}
+                        <div className="mt-6 p-4 bg-red-900/20 border border-red-800 rounded-lg">
+                            <h4 className="text-sm font-semibold text-red-400 mb-2">Emergency Hotline</h4>
+                            <a 
+                                href="tel:+8801800000000" 
+                                className="text-red-300 hover:text-red-200 font-medium transition-colors duration-200"
+                            >
+                                +880 1800-000000
+                            </a>
+                            <p className="text-xs text-gray-400 mt-1">Available 24/7</p>
                         </div>
                     </div>
                 </div>
 
-                <script>
-                    document.getElementById("year").textContent = new Date().getFullYear();
-                </script>
-            </footer>
-
-
-        </div>
+                {/* Bottom Section */}
+                <div className="mt-12 pt-8 border-t border-gray-800">
+                    <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+                        <p className="text-sm text-gray-400">
+                            © {currentYear} BloodConnect. All rights reserved.
+                        </p>
+                        
+                        <div className="flex flex-wrap gap-x-6 gap-y-2 text-sm">
+                            <a href="#privacy" className="text-gray-400 hover:text-white transition-colors duration-200">
+                                Privacy Policy
+                            </a>
+                            <a href="#terms" className="text-gray-400 hover:text-white transition-colors duration-200">
+                                Terms of Service
+                            </a>
+                            <a href="#cookies" className="text-gray-400 hover:text-white transition-colors duration-200">
+                                Cookie Policy
+                            </a>
+                            <a href="#accessibility" className="text-gray-400 hover:text-white transition-colors duration-200">
+                                Accessibility
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <div className="mt-4 text-center">
+                        <p className="text-xs text-gray-500">
+                            Made with ❤️ for saving lives. Every drop counts.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </footer>
     );
 };
 
