@@ -6,6 +6,8 @@ import useAxiosSecure from '../Hooks/useAxiosSecure';
 import { FiHeart, FiUsers, FiMapPin, FiClock, FiStar, FiArrowRight, FiPhone, FiMail, FiChevronLeft, FiChevronRight } from 'react-icons/fi';
 import { BiDonateBlood } from 'react-icons/bi';
 import { MdBloodtype, MdLocationOn, MdSchedule } from 'react-icons/md';
+import EligibilityChecker from '../Component/Eligibility/Eligibility';
+
 
 const Home = () => {
     const { user } = useContext(AuthContext);
@@ -19,22 +21,22 @@ const Home = () => {
     // Hero slider images
     const heroSlides = [
         {
-            image: "https://images.unsplash.com/photo-1559757148-5c350d0d3c56?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80",
+            image: "https://i.ibb.co.com/xKczJ6z7/slide-4.jpg",
+            title: "Emergency Blood Requests",
+            subtitle: "Get help when you need it most - 24/7 support",
+            cta: "Become a Donor"
+        },
+        {
+            image: 'https://i.ibb.co.com/LWrKYWn/slide-1.jpg',
             title: "Your Blood Can Save Lives",
             subtitle: "Join thousands of heroes making a difference every day",
             cta: "Become a Donor"
         },
         {
-            image: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80",
-            title: "Find Blood Donors Near You",
-            subtitle: "Connect with verified donors in your area instantly",
-            cta: "Find Donors"
-        },
-        {
-            image: "https://images.unsplash.com/photo-1582750433449-648ed127bb54?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80",
+            image: "https://i.ibb.co.com/PSY8bJt/slide-6.png",
             title: "Emergency Blood Requests",
             subtitle: "Get help when you need it most - 24/7 support",
-            cta: "Request Blood"
+            cta: "Become a Donor"
         }
     ];
 
@@ -115,25 +117,25 @@ const Home = () => {
                         <div
                             key={index}
                             className={`absolute inset-0 transition-opacity duration-1000 ${
-                                index === currentSlide ? 'opacity-100' : 'opacity-0'
+                                index === currentSlide ? 'opacity-70' : 'opacity-0'
                             }`}
                         >
                             <img
                                 src={slide.image}
                                 alt={slide.title}
-                                className="w-full h-full object-cover"
+                                className="w-full h-full object-cover "
                             />
-                            <div className="absolute inset-0 bg-black bg-opacity-50" />
+                            <div className="absolute inset-0  bg-opacity-50" />
                         </div>
                     ))}
                 </div>
                 
                 <div className="relative z-10 flex items-center justify-center h-full text-center text-white px-4">
                     <div className="max-w-4xl mx-auto fade-in">
-                        <h1 className="text-4xl md:text-6xl font-bold mb-6">
+                        <h1 className="text-4xl md:text-6xl font-bold mb-6 text-red-950">
                             {heroSlides[currentSlide].title}
                         </h1>
-                        <p className="text-xl md:text-2xl mb-8 text-gray-200">
+                        <p className="text-xl md:text-2xl mb-8  text-black">
                             {heroSlides[currentSlide].subtitle}
                         </p>
                         <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -146,7 +148,7 @@ const Home = () => {
                             </Link>
                             <Link
                                 to="/search"
-                                className="btn-secondary-custom text-lg px-8 py-4 inline-flex items-center justify-center bg-white text-red-600 border-white hover:bg-gray-100"
+                                className="btn-primary-custom text-lg px-8 py-4 inline-flex items-center justify-center font-bold bg-white border-white hover:bg-gray-100"
                             >
                                 <FiUsers className="mr-2" />
                                 Find Donors
@@ -155,8 +157,7 @@ const Home = () => {
                     </div>
                 </div>
 
-                {/* Slider Controls */}
-                <button
+                 <button
                     onClick={prevSlide}
                     className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-20 hover:bg-opacity-30 text-white p-2 rounded-full transition-all duration-200"
                 >
@@ -167,7 +168,7 @@ const Home = () => {
                     className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-20 hover:bg-opacity-30 text-white p-2 rounded-full transition-all duration-200"
                 >
                     <FiChevronRight className="w-6 h-6" />
-                </button>
+                 </button> 
 
                 {/* Slide Indicators */}
                 <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
@@ -269,6 +270,10 @@ const Home = () => {
                     </div>
                 </div>
             </section>
+
+            {/* Eligibility Section */}
+
+            <EligibilityChecker></EligibilityChecker>
 
             {/* Recent Donations Section */}
             <section className="section-padding bg-white dark:bg-gray-800">
@@ -557,35 +562,7 @@ const Home = () => {
                 </div>
             </section>
 
-            {/* Call to Action Section */}
-            <section className="section-padding bg-red-600">
-                <div className="max-w-4xl mx-auto text-center">
-                    <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
-                        Ready to Save Lives?
-                    </h2>
-                    <p className="text-xl text-red-100 mb-8">
-                        Join our community of heroes and make a difference today
-                    </p>
-                    <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                        <Link
-                            to="/register"
-                            className="bg-white text-red-600 px-8 py-4 rounded-md font-semibold hover:bg-gray-100 transition-colors duration-200 inline-flex items-center justify-center"
-                        >
-                            <BiDonateBlood className="mr-2 text-xl" />
-                            Become a Donor
-                        </Link>
-                        <Link
-                            to="/search"
-                            className="border-2 border-white text-white px-8 py-4 rounded-md font-semibold hover:bg-white hover:text-red-600 transition-colors duration-200 inline-flex items-center justify-center"
-                        >
-                            <FiUsers className="mr-2" />
-                            Find Donors
-                        </Link>
-                    </div>
-                </div>
-            </section>
-
-            <Footer />
+           
         </div>
     );
 };

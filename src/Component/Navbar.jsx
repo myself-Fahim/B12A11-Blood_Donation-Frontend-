@@ -46,7 +46,6 @@ const Navbar = () => {
         { to: '/', label: 'Home' },
         { to: '/search', label: 'Find Donors' },
         { to: '/donation', label: 'Donations' },
-        { to: '/dashboard', label: 'Dashboard' },
         { to: '/about', label: 'About' },
         { to: '/contact', label: 'Contact' },
         { to: '/blog', label: 'Blog' }

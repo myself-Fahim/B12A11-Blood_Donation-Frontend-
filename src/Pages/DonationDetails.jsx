@@ -16,7 +16,7 @@ const DonationDetails = () => {
     useEffect(() => {
         const fetchDonationDetails = async () => {
             try {
-                const response = await axiosSecure(`/request/id/${id}`);
+                const response = await axiosSecure.get(`/request/id/${id}`);
                 setDonation(response.data);
             } catch (err) {
                 console.error('Error fetching donation details:', err);

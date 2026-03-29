@@ -312,12 +312,10 @@ const DonationPublic = () => {
 
                                         <div className="border-t border-gray-200 dark:border-gray-700 pt-4">
                                             <div className="flex flex-col sm:flex-row gap-2">
-                                                <button className="btn-primary-custom flex-1 text-center">
-                                                    Contact Requester
-                                                </button>
+                                             
                                                 <Link
                                                     to={`/donation-details/${request._id}`}
-                                                    className="btn-secondary-custom flex-1 text-center"
+                                                    className="btn-primary-custom flex-1 text-center"
                                                 >
                                                     View Details
                                                 </Link>

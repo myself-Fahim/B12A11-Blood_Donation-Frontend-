@@ -5,6 +5,10 @@ import AuthContext from '../AuthProvider/AuthContext';
 import Loader from '../Component/Loader';
 
 const DashBoardLayout = () => {
+    const {role} = useContext(AuthContext)
+    if(!role) {
+        return <Loader></Loader>
+    }
    
     return (
         <div className='h-screen'>
