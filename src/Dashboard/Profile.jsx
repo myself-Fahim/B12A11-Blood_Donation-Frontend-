@@ -1,9 +1,27 @@
 import React, { useContext } from 'react';
 import AuthContext from '../AuthProvider/AuthContext';
 import { Loader } from 'lucide-react';
+import { updateProfile } from 'firebase/auth';
+import auth from '../Firebase/Firebase.init';
 
 const Profile = () => {
-    const { user,role} = useContext(AuthContext);
+    
+    const { user,role,setUser} = useContext(AuthContext);
+    console.log(user)
+    const handleUpdate = (e)=>{
+        e.preventDefault()
+        const name = e.target.name.value
+        const photo = e.target.photo.value
+
+        updateProfile(auth.currentUser,{
+            displayName:name,
+            photoURL:photo
+        }).then(()=>{
+            setUser({...auth.currentUser,displayName:name,photoURL:photo})
+            alert('Successfully Updated')
+        }).catch(err => console.log(err))
+
+    }
 
     return (
         <div className="min-h-screen bg-gray-50 py-12 px-4">
@@ -36,7 +54,7 @@ const Profile = () => {
 
                         {/* Right Side: Form Details */}
                         <div className="lg:w-2/3 p-8 lg:p-12">
-                            <form className="space-y-6">
+                            <form onSubmit={handleUpdate} className="space-y-6">
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     <div>
                                         <label className="block text-sm font-semibold text-gray-600 mb-2">Full Name</label>
@@ -44,6 +62,7 @@ const Profile = () => {
                                             defaultValue={user?.displayName} 
                                             className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-red-400 focus:border-transparent outline-none transition-all" 
                                             placeholder="Enter your name"
+                                            name='name'
                                         />
                                     </div>
                                     <div>
@@ -78,11 +97,12 @@ const Profile = () => {
                                         defaultValue={user?.photoURL} 
                                         className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-red-400 focus:border-transparent outline-none transition-all" 
                                         placeholder="Image link"
+                                        name='photo'
                                     />
                                 </div>
 
                                 <div className="pt-4 border-t border-gray-100 flex justify-end">
-                                    <button className="px-8 py-2.5 bg-red-600 hover:bg-red-700 text-white font-bold rounded-lg transition-colors shadow-md active:transform active:scale-95">
+                                    <button  className="px-8 py-2.5 bg-red-600 hover:bg-red-700 text-white font-bold rounded-lg transition-colors shadow-md active:transform active:scale-95">
                                         Update Profile
                                     </button>
                                 </div>

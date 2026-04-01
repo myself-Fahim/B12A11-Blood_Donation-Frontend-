@@ -8,7 +8,7 @@ import { BiDonateBlood } from 'react-icons/bi';
 
 const DonationDetails = () => {
     const { id } = useParams();
-    const axiosSecure = useAxiosSecure();
+    const axiosSecure = useAxiosSecure()
     const [donation, setDonation] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);

@@ -289,7 +289,7 @@ const Home = () => {
                     
                     <div className="grid-responsive">
                         {recentDonations.map((donation) => (
-                            <div key={donation._id} className="card-base p-6">
+                            <div key={donation._id} className="card-base p-6 flex flex-col">
                                 <div className="flex items-center justify-between mb-4">
                                     <div className="flex items-center space-x-3">
                                         <div className="w-12 h-12 bg-red-100 dark:bg-red-900 rounded-full flex items-center justify-center">
@@ -314,7 +314,7 @@ const Home = () => {
                                         {donation.status}
                                     </span>
                                 </div>
-                                <div className="space-y-2 text-sm text-gray-600 dark:text-gray-400 mb-4">
+                                <div className="space-y-2 text-sm text-gray-600 dark:text-gray-400 mb-4 flex-grow">
                                     <div className="flex items-center">
                                         <MdLocationOn className="w-4 h-4 mr-2" />
                                         {donation.recipientUpazila}, {donation.recipientDistrict}
@@ -326,7 +326,7 @@ const Home = () => {
                                 </div>
                                 <Link
                                     to={`/donation-details/${donation._id}`}
-                                    className="btn-primary-custom w-full text-center inline-flex items-center justify-center"
+                                    className="btn-primary-custom w-full text-center inline-flex items-center justify-center "
                                 >
                                     View Details
                                     <FiArrowRight className="ml-2 w-4 h-4" />

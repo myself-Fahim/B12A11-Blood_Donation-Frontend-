@@ -2,8 +2,9 @@ import React, { useContext, useEffect, useState } from 'react';
 import useAxiosSecure from '../Hooks/useAxiosSecure';
 import AuthContext from '../AuthProvider/AuthContext';
 import Loader from '../Component/Loader';
-import { FiSearch, FiFilter, FiMapPin, FiClock, FiUser, FiChevronLeft, FiChevronRight } from 'react-icons/fi';
+import { FiSearch, FiFilter, FiMapPin, FiClock, FiUser, FiChevronLeft, FiChevronRight, FiMail, FiSend } from 'react-icons/fi';
 import { MdBloodtype } from 'react-icons/md';
+import { all } from 'axios';
 
 const Search = () => {
     const axiosSecure = useAxiosSecure();
@@ -13,7 +14,7 @@ const Search = () => {
     const [loading, setLoading] = useState(true);
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage] = useState(8);
-    
+
     // Filter states
     const [filters, setFilters] = useState({
         bloodGroup: '',
@@ -22,15 +23,20 @@ const Search = () => {
         status: '',
         dateRange: ''
     });
-    
+
     // Sort state
     const [sortBy, setSortBy] = useState('newest');
 
     useEffect(() => {
-        axiosSecure('/request')
+        axiosSecure.get('/users')
             .then(res => {
-                setAllUserData(res.data);
-                setFilteredData(res.data);
+                
+                const donorData = res.data.filter(element => {
+                    return element?.role == 'donor'
+
+                });
+
+                setAllUserData(donorData)
                 setLoading(false);
             })
             .catch(err => {
@@ -39,27 +45,32 @@ const Search = () => {
             });
     }, [axiosSecure]);
 
+
+
+
+
+
     // Apply filters and sorting
     useEffect(() => {
         let filtered = [...allUserData];
 
         // Apply filters
         if (filters.bloodGroup) {
-            filtered = filtered.filter(item => item.bloodGrp === filters.bloodGroup);
+            filtered = filtered.filter(item =>  item.group == filters.bloodGroup);
         }
         if (filters.recipientUpazila) {
-            filtered = filtered.filter(item => item.recipientUpazila === filters.recipientUpazila);
+            filtered = filtered.filter(item => item.upazila == filters.recipientUpazila);
         }
         if (filters.recipientDistrict) {
-            filtered = filtered.filter(item => item.recipientDistrict === filters.recipientDistrict);
+            filtered = filtered.filter(item => item.district == filters.recipientDistrict);
         }
         if (filters.status) {
-            filtered = filtered.filter(item => item.status === filters.status);
+            filtered = filtered.filter(item => item.status == filters.status);
         }
         if (filters.dateRange) {
             const today = new Date();
             const filterDate = new Date();
-            
+
             switch (filters.dateRange) {
                 case 'today':
                     filterDate.setDate(today.getDate());
@@ -73,7 +84,7 @@ const Search = () => {
                 default:
                     break;
             }
-            
+
             if (filters.dateRange !== '') {
                 filtered = filtered.filter(item => {
                     const itemDate = new Date(item.donationDate);
@@ -83,6 +94,8 @@ const Search = () => {
         }
 
         // Apply sorting
+    
+        setFilteredData(filtered)
         switch (sortBy) {
             case 'newest':
                 filtered.sort((a, b) => new Date(b.donationDate) - new Date(a.donationDate));
@@ -90,19 +103,15 @@ const Search = () => {
             case 'oldest':
                 filtered.sort((a, b) => new Date(a.donationDate) - new Date(b.donationDate));
                 break;
-            case 'bloodType':
-                filtered.sort((a, b) => a.bloodGrp.localeCompare(b.bloodGrp));
-                break;
-            case 'location':
-                filtered.sort((a, b) => a.recipientDistrict.localeCompare(b.recipientDistrict));
-                break;
             default:
                 break;
         }
 
-        setFilteredData(filtered);
+    
+ 
+       
         setCurrentPage(1); // Reset to first page when filters change
-    }, [allUserData, filters, sortBy]);
+    }, [filters, sortBy,  allUserData]);
 
     const handleFilterChange = (filterName, value) => {
         setFilters(prev => ({
@@ -126,7 +135,7 @@ const Search = () => {
     const totalPages = Math.ceil(filteredData.length / itemsPerPage);
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
-    const currentItems = filteredData.slice(startIndex, endIndex);
+    //  const currentItems = filteredData.slice(startIndex, endIndex);
 
     const goToPage = (page) => {
         setCurrentPage(page);
@@ -153,6 +162,7 @@ const Search = () => {
             </div>
         );
     }
+ console.log(filteredData)
 
     return (
         <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
@@ -182,8 +192,8 @@ const Search = () => {
                                 Clear All Filters
                             </button>
                         </div>
-                        
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                             {/* Blood Group Filter */}
                             <div>
                                 <label className="form-label">Blood Group</label>
@@ -247,14 +257,13 @@ const Search = () => {
                                     className="form-input"
                                 >
                                     <option value="">All Status</option>
-                                    <option value="pending">Pending</option>
-                                    <option value="completed">Completed</option>
-                                    <option value="cancelled">Cancelled</option>
+                                    <option value="active">Active</option>
+                                    <option value="block">Block</option>
                                 </select>
                             </div>
 
                             {/* Date Range Filter */}
-                            <div>
+                            {/* <div>
                                 <label className="form-label">Date Range</label>
                                 <select
                                     value={filters.dateRange}
@@ -266,7 +275,7 @@ const Search = () => {
                                     <option value="week">This Week</option>
                                     <option value="month">This Month</option>
                                 </select>
-                            </div>
+                            </div> */}
                         </div>
                     </div>
 
@@ -275,7 +284,7 @@ const Search = () => {
                         <div className="text-gray-600 dark:text-gray-400">
                             Showing {startIndex + 1}-{Math.min(endIndex, filteredData.length)} of {filteredData.length} results
                         </div>
-                        
+
                         <div className="flex items-center space-x-2">
                             <label className="text-sm font-medium text-gray-700 dark:text-gray-300">Sort by:</label>
                             <select
@@ -292,7 +301,7 @@ const Search = () => {
                     </div>
 
                     {/* Results Grid */}
-                    {currentItems.length === 0 ? (
+                    {filteredData.length === 0 ? (
                         <div className="text-center py-16">
                             <FiSearch className="w-16 h-16 text-gray-400 mx-auto mb-4" />
                             <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
@@ -310,57 +319,60 @@ const Search = () => {
                         </div>
                     ) : (
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                            {currentItems.map(request => (
-                                <div key={request._id} className="card-base p-6">
+                            {filteredData.map(user => (
+                                <div key={user.email} className="card-base p-6 flex flex-col h-full">
+                                    {/* Header Section: Photo and Name */}
                                     <div className="flex items-center justify-between mb-4">
                                         <div className="flex items-center space-x-3">
-                                            <div className="w-12 h-12 bg-red-100 dark:bg-red-900 rounded-full flex items-center justify-center">
-                                                <span className="text-red-600 dark:text-red-400 font-bold text-sm">
-                                                    {request.bloodGrp}
+                                            <div className="relative">
+                                                <img
+                                                    src={user.photoUrl}
+                                                    alt={user.name}
+                                                    className="w-14 h-14 rounded-full object-cover border-2 border-red-100 dark:border-red-900"
+                                                />
+                                                <span className="absolute -bottom-1 -right-1 bg-red-600 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full">
+                                                    {user.group}
                                                 </span>
                                             </div>
                                             <div>
-                                                <h3 className="font-semibold text-gray-900 dark:text-white">
-                                                    {request.recipient}
+                                                <h3 className="font-semibold text-gray-900 dark:text-white leading-tight">
+                                                    {user.name}
                                                 </h3>
-                                                <p className="text-sm text-gray-500 dark:text-gray-400">
-                                                    Patient
+                                                <p className="text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
+                                                    {user.role}
                                                 </p>
                                             </div>
                                         </div>
-                                        <span className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(request.status)}`}>
-                                            {request.status || 'Pending'}
+                                        <span className={`px-2 py-1 rounded-full text-[10px] uppercase font-bold ${user.status === 'active'
+                                            ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'
+                                            : 'bg-gray-100 text-gray-700'
+                                            }`}>
+                                            {user.status}
                                         </span>
                                     </div>
 
-                                    <div className="space-y-2 text-sm text-gray-600 dark:text-gray-400 mb-4">
+                                    {/* Info Section */}
+                                    <div className="space-y-2 text-sm text-gray-600 dark:text-gray-400 mb-6 flex-grow">
                                         <div className="flex items-center">
-                                            <FiUser className="w-4 h-4 mr-2 flex-shrink-0" />
-                                            <span className="truncate">Requester: {request.requester}</span>
+                                            <FiMapPin className="w-4 h-4 mr-2 text-red-500 flex-shrink-0" />
+                                            <span className="truncate">{user.upazila}, {user.district}</span>
                                         </div>
                                         <div className="flex items-center">
-                                            <FiMapPin className="w-4 h-4 mr-2 flex-shrink-0" />
-                                            <span className="truncate">{request.recipientUpazila}, {request.recipientDistrict}</span>
+                                            <FiMail className="w-4 h-4 mr-2 text-gray-400 flex-shrink-0" />
+                                            <span className="truncate">{user.email}</span>
                                         </div>
                                         <div className="flex items-center">
-                                            <FiClock className="w-4 h-4 mr-2 flex-shrink-0" />
-                                            <span>{request.donationDate} at {request.donationTime}</span>
-                                        </div>
-                                        <div className="flex items-center">
-                                            <MdBloodtype className="w-4 h-4 mr-2 flex-shrink-0" />
-                                            <span>Blood Type: {request.bloodGrp}</span>
+                                            <MdBloodtype className="w-4 h-4 mr-2 text-red-500 flex-shrink-0" />
+                                            <span>Blood Group: <span className="font-bold text-red-600">{user.group}</span></span>
                                         </div>
                                     </div>
 
-                                    <div className="border-t border-gray-200 dark:border-gray-700 pt-4">
-                                        <div className="flex items-center justify-between">
-                                            <div className="text-xs text-gray-500 dark:text-gray-400">
-                                                Contact: {request.requesterEmail}
-                                            </div>
-                                            <button className="btn-primary-custom text-sm px-4 py-2">
-                                                Contact Donor
-                                            </button>
-                                        </div>
+                                    {/* Footer Action */}
+                                    <div className="border-t border-gray-100 dark:border-gray-700 pt-4 mt-auto">
+                                        <button className="btn-primary-custom w-full text-sm py-2.5 flex items-center justify-center gap-2">
+                                            <FiSend className="w-4 h-4" />
+                                            Contact Donor
+                                        </button>
                                     </div>
                                 </div>
                             ))}
@@ -377,35 +389,34 @@ const Search = () => {
                             >
                                 <FiChevronLeft className="w-5 h-5" />
                             </button>
-                            
+
                             {[...Array(totalPages)].map((_, index) => {
                                 const page = index + 1;
                                 const isCurrentPage = page === currentPage;
-                                const showPage = page === 1 || page === totalPages || 
-                                               (page >= currentPage - 1 && page <= currentPage + 1);
-                                
+                                const showPage = page === 1 || page === totalPages ||
+                                    (page >= currentPage - 1 && page <= currentPage + 1);
+
                                 if (!showPage) {
                                     if (page === currentPage - 2 || page === currentPage + 2) {
                                         return <span key={page} className="px-2">...</span>;
                                     }
                                     return null;
                                 }
-                                
+
                                 return (
                                     <button
                                         key={page}
                                         onClick={() => goToPage(page)}
-                                        className={`px-4 py-2 rounded-md border ${
-                                            isCurrentPage
-                                                ? 'bg-red-600 text-white border-red-600'
-                                                : 'border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800'
-                                        }`}
+                                        className={`px-4 py-2 rounded-md border ${isCurrentPage
+                                            ? 'bg-red-600 text-white border-red-600'
+                                            : 'border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800'
+                                            }`}
                                     >
                                         {page}
                                     </button>
                                 );
                             })}
-                            
+
                             <button
                                 onClick={() => goToPage(currentPage + 1)}
                                 disabled={currentPage === totalPages}
