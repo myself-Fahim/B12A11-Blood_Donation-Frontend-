@@ -2,10 +2,13 @@ import React, { useContext, useEffect, useState } from "react";
 import { Link, NavLink } from "react-router";
 import AuthContext from "../AuthProvider/AuthContext";
 import useAxiosSecure from "../Hooks/useAxiosSecure";
-import toast, { Toaster } from 'react-hot-toast';
+
 import { FiHome, FiUser, FiHeart, FiPlus, FiUsers, FiList, FiSettings, FiLogOut, FiMenu, FiX } from 'react-icons/fi';
 import { BiDonateBlood } from 'react-icons/bi';
 import { MdAdminPanelSettings } from 'react-icons/md';
+import { signOut } from "firebase/auth";
+import auth from "../Firebase/Firebase.init";
+import { toast, ToastContainer } from "react-toastify";
 
 const Aside = () => {
     const { role, user } = useContext(AuthContext);
@@ -22,6 +25,17 @@ const Aside = () => {
             })
             .catch(err => console.log(err));
     }, [axiosSecure, user?.email]);
+
+
+      const handleSignout = () => {
+        signOut(auth)
+            .then(() => {
+                toast('Signout Successfully')
+            })
+            .catch((error) => {
+                console.error('Sign out error:', error);
+            });
+    };
 
     const isBlocked = modifyUser?.status === "block";
 
@@ -53,7 +67,8 @@ const Aside = () => {
 
     return (
         <>
-            <Toaster />
+            
+            
             
             {/* Mobile Menu Button */}
             <div className="lg:hidden fixed top-4 left-4 z-50">
@@ -163,6 +178,7 @@ const Aside = () => {
                         <button
                             onClick={() => {
                                 // Add logout functionality here
+                                handleSignout()
                                 setIsSidebarOpen(false);
                             }}
                             className="flex items-center space-x-3 px-4 py-3 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-all duration-200 w-full"

@@ -4,6 +4,7 @@ import AuthContext from '../AuthProvider/AuthContext';
 import Navbar from '../Component/Navbar';
 import Loader from '../Component/Loader';
 import Footer from '../Component/Footer';
+import { ToastContainer } from 'react-toastify';
 
 const Root = () => {
   const {loading} = useContext(AuthContext);
@@ -18,6 +19,7 @@ const Root = () => {
               <Outlet />
             </main>
             <Footer />
+            <ToastContainer></ToastContainer>
           </>
       }
     </div>

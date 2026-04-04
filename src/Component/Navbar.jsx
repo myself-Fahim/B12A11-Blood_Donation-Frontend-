@@ -6,6 +6,7 @@ import auth from '../Firebase/Firebase.init';
 import { useTheme } from '../Context/ThemeContext';
 import { FiSun, FiMoon, FiMenu, FiX, FiUser, FiSettings, FiLogOut, FiChevronDown } from 'react-icons/fi';
 import { BiDonateBlood } from 'react-icons/bi';
+  import { ToastContainer, toast } from 'react-toastify';
 
 const Navbar = () => {
     const { user } = useContext(AuthContext);
@@ -16,7 +17,8 @@ const Navbar = () => {
     const handleSignout = () => {
         signOut(auth)
             .then(() => {
-                alert('Signed out successfully');
+                toast('Signout Successfully')
+                
                 setIsProfileDropdownOpen(false);
             })
             .catch((error) => {
@@ -54,11 +56,13 @@ const Navbar = () => {
     const navLinks = user ? privateNavLinks : publicNavLinks;
 
     return (
+         
         <nav className="sticky top-0 z-50 bg-white dark:bg-gray-900 shadow-lg border-b border-gray-200 dark:border-gray-700">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="flex justify-between items-center h-16">
+              <ToastContainer />
+            <div className=" lg:px-20">
+                <div className="flex justify-between gap-2 h-16">
                     {/* Logo */}
-                    <div className="flex items-center space-x-3">
+                    <div className="flex items-center space-x-3 ">
                         <div className="flex items-center justify-center w-10 h-10 bg-red-600 rounded-full">
                             <BiDonateBlood className="text-white text-xl" />
                         </div>
@@ -69,7 +73,7 @@ const Navbar = () => {
                     </div>
 
                     {/* Desktop Navigation */}
-                    <div className="hidden lg:flex items-center space-x-8">
+                    <div className="hidden lg:flex items-center space-x-6 ">
                         {navLinks.map((link) => (
                             <NavLink
                                 key={link.to}
@@ -88,7 +92,7 @@ const Navbar = () => {
                     </div>
 
                     {/* Right side controls */}
-                    <div className="flex items-center space-x-4">
+                    <div className="flex items-center space-x-2 ">
                         {/* Theme Toggle */}
                         <button
                             onClick={toggleTheme}
@@ -163,7 +167,7 @@ const Navbar = () => {
                                 </Link>
                                 <Link
                                     to="/register"
-                                    className="px-4 py-2 bg-red-600 text-white text-sm font-medium rounded-md hover:bg-red-700 transition-colors duration-200"
+                                    className="hidden lg:flex px-1 lg:px-4 py-2 bg-red-600 text-white text-sm font-medium rounded-md hover:bg-red-700 transition-colors duration-200"
                                 >
                                     Join as Donor
                                 </Link>
@@ -204,6 +208,19 @@ const Navbar = () => {
                                     {link.label}
                                 </NavLink>
                             ))}
+
+                             <NavLink
+                                    to="/register"
+                                    className={({ isActive }) =>
+                                        `block px-3 py-2 rounded-md text-base font-medium transition-colors duration-200 ${
+                                            isActive
+                                                ? 'bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-200'
+                                                : 'text-gray-700 hover:text-red-600 hover:bg-gray-50 dark:text-gray-300 dark:hover:text-red-400 dark:hover:bg-gray-800'
+                                        }`
+                                    }
+                                >
+                                    Join as Donor
+                                </NavLink>
                         </div>
                     </div>
                 )}

@@ -15,6 +15,9 @@ const DonationPublic = () => {
     const [loading, setLoading] = useState(true);
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage] = useState(12);
+   
+
+    console.log(user)
     
     // Filter states
     const [filters, setFilters] = useState({
@@ -66,17 +69,11 @@ const DonationPublic = () => {
 
         // Apply sorting
         switch (sortBy) {
-            case 'newest':
-                filtered.sort((a, b) => new Date(b.donationDate) - new Date(a.donationDate));
-                break;
             case 'urgent':
                 filtered.sort((a, b) => new Date(a.donationDate) - new Date(b.donationDate));
                 break;
             case 'bloodType':
                 filtered.sort((a, b) => a.bloodGrp.localeCompare(b.bloodGrp));
-                break;
-            case 'location':
-                filtered.sort((a, b) => a.recipientDistrict.localeCompare(b.recipientDistrict));
                 break;
             default:
                 break;
@@ -92,6 +89,8 @@ const DonationPublic = () => {
             [filterName]: value
         }));
     };
+
+    console.log(filteredRequests)
 
     const clearFilters = () => {
         setFilters({
@@ -113,18 +112,7 @@ const DonationPublic = () => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
-    const getUrgencyLevel = (donationDate) => {
-        const today = new Date();
-        const donation = new Date(donationDate);
-        const diffTime = donation - today;
-        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-        
-        if (diffDays <= 1) return { level: 'critical', color: 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200', text: 'Critical' };
-        if (diffDays <= 3) return { level: 'urgent', color: 'bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200', text: 'Urgent' };
-        if (diffDays <= 7) return { level: 'moderate', color: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200', text: 'Moderate' };
-        return { level: 'normal', color: 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200', text: 'Normal' };
-    };
-
+   
     if (loading) {
         return (
             <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
@@ -177,7 +165,7 @@ const DonationPublic = () => {
                             </button>
                         </div>
                         
-                        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                             {/* Blood Group Filter */}
                             <div>
                                 <label className="form-label">Blood Group</label>
@@ -210,19 +198,6 @@ const DonationPublic = () => {
                                 />
                             </div>
 
-                            {/* Urgency Filter */}
-                            <div>
-                                <label className="form-label">Urgency</label>
-                                <select
-                                    value={filters.urgency}
-                                    onChange={(e) => handleFilterChange('urgency', e.target.value)}
-                                    className="form-input"
-                                >
-                                    <option value="">All Requests</option>
-                                    <option value="urgent">Urgent (Next 3 days)</option>
-                                </select>
-                            </div>
-
                             {/* Sort */}
                             <div>
                                 <label className="form-label">Sort By</label>
@@ -231,10 +206,10 @@ const DonationPublic = () => {
                                     onChange={(e) => setSortBy(e.target.value)}
                                     className="form-input"
                                 >
-                                    <option value="newest">Newest First</option>
-                                    <option value="urgent">Most Urgent</option>
+                                    <option >All Request</option>
+                                    <option value="urgent">Newest First</option>
                                     <option value="bloodType">Blood Type</option>
-                                    <option value="location">Location</option>
+                                  
                                 </select>
                             </div>
                         </div>
@@ -267,7 +242,7 @@ const DonationPublic = () => {
                     ) : (
                         <div className="grid-responsive">
                             {currentItems.map(request => {
-                                const urgency = getUrgencyLevel(request.donationDate);
+                              
                                 return (
                                     <div key={request._id} className="card-base p-6">
                                         <div className="flex items-center justify-between mb-4">
@@ -286,9 +261,7 @@ const DonationPublic = () => {
                                                     </p>
                                                 </div>
                                             </div>
-                                            <span className={`px-3 py-1 rounded-full text-xs font-medium ${urgency.color}`}>
-                                                {urgency.text}
-                                            </span>
+                                           
                                         </div>
 
                                         <div className="space-y-3 text-sm text-gray-600 dark:text-gray-400 mb-6">

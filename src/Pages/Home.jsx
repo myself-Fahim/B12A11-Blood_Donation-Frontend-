@@ -117,7 +117,7 @@ const Home = () => {
                         <div
                             key={index}
                             className={`absolute inset-0 transition-opacity duration-1000 ${
-                                index === currentSlide ? 'opacity-70' : 'opacity-0'
+                                index === currentSlide ? 'opacity-60' : 'opacity-0'
                             }`}
                         >
                             <img
@@ -132,16 +132,16 @@ const Home = () => {
                 
                 <div className="relative z-10 flex items-center justify-center h-full text-center text-white px-4">
                     <div className="max-w-4xl mx-auto fade-in">
-                        <h1 className="text-4xl md:text-6xl font-bold mb-6 text-red-950">
+                        <h1 className="text-4xl md:text-6xl font-bold mb-6 text-amber-900">
                             {heroSlides[currentSlide].title}
                         </h1>
-                        <p className="text-xl md:text-2xl mb-8  text-black">
+                        <p className="text-xl md:text-2xl mb-8 font-semibold text-black">
                             {heroSlides[currentSlide].subtitle}
                         </p>
-                        <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                        <div className="flex flex-col mx-15 md:mx-0 md:flex-row justify-center gap-4 ">
                             <Link
                                 to={user ? "/dashboard/request" : "/register"}
-                                className="btn-primary-custom text-lg px-8 py-4 inline-flex items-center justify-center"
+                                className="btn-primary-custom flex items-center justify-center "
                             >
                                 <BiDonateBlood className="mr-2 text-xl" />
                                 {heroSlides[currentSlide].cta}
